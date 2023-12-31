@@ -1,0 +1,106 @@
+@extends('admin.layouts.admin')
+@section('content')
+    <div class="container-fluid">
+        @include('admin.components.errors')
+        @include('admin.pages.partials.back_arrow',['backRoute' => route('admin.videos.index'),'text' => 'Add new video'])
+        <form method="post" action="{{ route('admin.videos.store') }}"  enctype="multipart/form-data">
+            @csrf
+            <div class="col-lg-9">
+
+                <input type="hidden" name="category_id" value="19">
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label" for="type"><strong>Place</strong><span class="text-danger">*</span></label>
+                    <div class="col-sm-10">
+                        <select name="type" id="type" class="form-control select2 @error('type') is-invalid @enderror" data-placeholder="Select Place" required>
+                            <option value="">Select Place </option>
+                            @foreach(\App\Models\NewsType::whereIn('type',[2,3])->select('news_type_id','news_type')->get() as $newsType)
+                                <option value="{{$newsType->news_type_id}}" {{ old('type') && $newsType->news_type_id == old('type')  ? 'selected' : ''}}>{{$newsType->news_type}}</option>
+                            @endforeach
+                        </select>
+                        @include('admin.components.error',['error' => 'type'])
+                    </div>
+                </div>
+                @include('admin.components.form.input',['fieldId' => 'title','fieldTitle' => 'Title', 'placeholder' => 'Title','required' => true, 'autofocus' => true,'autocomplete' => null])
+                @include('admin.components.form.input',['fieldId' => 'slug','fieldTitle' => 'Slug', 'placeholder' => 'Slug','required' => true, 'autofocus' => false,'autocomplete' => null])
+
+                <div class="form-group row">
+                    <label for="content" class="col-sm-2 col-form-label">Content<span class="text-danger">*</span></label>
+                    <div class="col-sm-10">
+                        <textarea class="form-control content" id="content" name="content"  placeholder="" >{{old('content')}}</textarea>
+                        @include('admin.components.error',['error' => 'content'])
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Live Stream</label>
+                    <div class="col-sm-10">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="mark_as_live" id="mark_as_live" value="1" {{old('mark_as_live') == '1' ? 'checked' : ''}} required>
+                            <label class="form-check-label" for="mark_as_live">Yes</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="mark_as_live" id="not_live" value="0" {{old('mark_as_live') == '0' ? 'checked' : 'checked'}} required>
+                            <label class="form-check-label" for="not_live">No</label>
+                        </div>
+                    </div>
+                    @include('admin.components.error',['error' => 'mark_as_live'])
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label"></label>
+                    <div class="col-sm-10">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="is_published" id="is_published" value="1" {{old('is_published') == '1' ? 'checked' : ''}} required>
+                            <label class="form-check-label" for="is_published">Publish</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="is_published" id="save" value="0" {{old('is_published') == '0' ? 'checked' : 'checked'}} required>
+                            <label class="form-check-label" for="save">Save</label>
+                        </div>
+                    </div>
+                    @include('admin.components.error',['error' => 'is_published'])
+                </div>
+
+                <div class="mb-3 text-center">
+                    <button type="submit" class="btn btn-primary bg-theme">Save changes</button>
+                </div>
+
+
+            </div>
+        </form>
+
+    </div>
+@endsection
+@section('js')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/5.7.0/tinymce.min.js" integrity="sha512-XaygRY58e7fVVWydN6jQsLpLMyf7qb4cKZjIi93WbKjT6+kG/x4H5Q73Tff69trL9K0YDPIswzWe6hkcyuOHlw==" crossorigin="anonymous"></script>
+    <script src="{{asset('js/slugify.js')}}"></script>
+    <script src="{{asset('admin/js/select2.min.js')}}"></script>
+
+    <script type="text/javascript">
+
+        $(document).ready(function() {
+            $('.select2').select2();
+            putSlugInInputFieldForRealEstate('#title','#slug','#type',$('#type').val());
+            tinymce.init({
+                selector: "textarea.content",
+                relative_urls: false,
+                menubar: false,
+                theme: "silver",
+                convert_urls: false,
+                height: 400,
+                plugins: [
+                    "media"
+                ],
+                toolbar1: "",
+                toolbar2: "media",
+
+            });
+
+        }); //ready
+    </script>
+@endsection
+
+@section('css')
+    <link href="{{asset('admin/css/select2.min.css')}}" rel="stylesheet" />
+@endsection
+

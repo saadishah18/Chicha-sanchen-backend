@@ -1,0 +1,41 @@
+
+
+
+// $classes: 'has-bg','no-bg';
+// $brand:#fff;
+// @each $class in $classes {
+//     $brand: #00cccc;
+//     //$selector: 'body';
+//     @if $class == 'has-bg' {
+//       $brand: #ff0033;
+//       $selector: 'body.' + $class;
+//     }
+//     #{$selector}{
+//       display: inline;
+//     }
+//   }
+// $sizes: 40px, 50px, 80px;
+
+// @each $size in $sizes {
+//   .icon-#{$size} {
+//     font-size: $size;
+//     height: $size;
+//     width: $size;
+//   }
+// }
+
+// @mixin card-bg($light-theme: true) {
+//     @if $light-theme {
+//       background-color: transparent;
+//     } @else {
+//       background-color: #efefef;
+//       $card-border-color:#ddd;
+//     }
+//   }
+  
+//   .card {
+//     @include card-bg($light-theme: true);
+//     &.has-bg {
+//       @include card-bg($light-theme: false);
+//     }
+//   }

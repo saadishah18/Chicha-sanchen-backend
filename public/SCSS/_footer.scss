@@ -1,0 +1,21 @@
+footer{
+    font-size: 13px;
+    line-height: 21px;
+    color:#fff;
+    strong{
+        font-size: 18px;
+        text-transform: uppercase;
+        color: #fff;
+        font-weight: 600;
+    }
+    a{
+        color:#fff;
+        text-decoration: none;
+        &:hover{
+            text-decoration: underline;
+            color:#fff;
+            transition: .6s;
+            color: red;
+        }
+    }
+}
