@@ -30,7 +30,9 @@ Route::post('forgot-password/update-password', [AuthController::class, 'forgotPa
 //Route::get('/verify-email', [AuthController::class,'verifyEmail'])->name('verify.email');
 Route::post('/verify-email', [AuthController::class,'verifyEmail'])->name('verify.email');
 
-
+Route::get('outlets',[OutletController::class,'index']);
+Route::get('outlet-categories',[OutletController::class,'detail']);
+Route::get('category-products',[CategoryController::class,'categoryProduct']);
 //Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 ////    return $request->user();
 //    Route::get('outlets',[OutletController::class,'index']);
@@ -38,7 +40,5 @@ Route::post('/verify-email', [AuthController::class,'verifyEmail'])->name('verif
 
 Route::prefix('auth')->middleware('auth:sanctum',)->group(function () {
 //    return $request->user();
-    Route::get('outlets',[OutletController::class,'index']);
-    Route::get('outlet-categories',[OutletController::class,'detail']);
-    Route::get('category-products',[CategoryController::class,'categoryProduct']);
+
 });
