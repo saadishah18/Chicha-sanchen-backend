@@ -49,11 +49,21 @@ class ApiService
         return $this->response(null, $message, $status);
     }
 
-    public function server_error(\Throwable $throwable): \Illuminate\Http\JsonResponse
+    public function server_error($throwable): \Illuminate\Http\JsonResponse
     {
         $code = $throwable->getCode() ?? 500;
-        $code = $code > 0 ? $code : 500;
-        return $this->response(config('app.debug') ? $throwable->getTrace() : null, config('app.debug') ? $throwable->getMessage() : trans('response.server_error'), $code);
+        // Check if the code is numeric and greater than 0
+        if (is_numeric($code) && $code > 0) {
+            $statusCode = $code;
+        } else {
+            // If the code is not numeric or less than or equal to 0, set a default
+            $statusCode = 500;
+        }
+        // If you want to include the original error code when it's not numeric
+        if (!is_numeric($code)) {
+            $response['original_code'] = $code;
+        }
+        return $this->response(config('app.debug') ? $throwable->getTrace() : null, config('app.debug') ? $throwable->getMessage() : trans('response.server_error'), $statusCode);
     }
 
     public function forbidden(): \Illuminate\Http\JsonResponse

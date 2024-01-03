@@ -22,12 +22,13 @@ use App\Http\Controllers\Api\CategoryController;
 Route::post('login', [AuthController::class, 'login']);
 Route::post('social-login', [AuthController::class, 'social']);
 Route::post('register', [AuthController::class, 'register']);
-Route::post('phone/send-opt', [AuthController::class, 'sendPhoneOTP']);
-Route::post('phone/verify', [AuthController::class, 'verifyPhone']);
+Route::post('resend-otp', [AuthController::class, 'resendOTP']);
+//Route::post('phone/verify', [AuthController::class, 'verifyPhone']);
 Route::post('forgot-password/send-opt', [AuthController::class, 'sendForgotPasswordOTP']);
-Route::post('forgot-password/update-password', [AuthController::class, 'updatePassword']);
+Route::post('forgot-password/update-password', [AuthController::class, 'forgotPasswordVerifyOTP']);
 
-Route::get('/verify-email', [AuthController::class,'verifyEmail'])->name('verify.email');
+//Route::get('/verify-email', [AuthController::class,'verifyEmail'])->name('verify.email');
+Route::post('/verify-email', [AuthController::class,'verifyEmail'])->name('verify.email');
 
 
 //Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

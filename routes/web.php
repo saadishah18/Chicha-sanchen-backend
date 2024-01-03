@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('login');
 });
 
 //Route::get('/dashboard', function () {
@@ -27,33 +27,32 @@ Route::get('/', function () {
 //});
 
 require __DIR__.'/auth.php';
-Route::get('/', function () {
-    return view('welcome');
-});
-//Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
-Route::prefix('admin')->group(function () {
-
+//Route::get('/', function () {
+//    return view('welcome');
+//});
+Route::middleware(['auth'])->prefix('admin')->group(function () {
+//Route::prefix('admin')->group(function () {
     Route::get('/dashboard', [\App\Http\Controllers\Admin\AdminDashboardController::class, 'dashboard'])->name('admin.dashboard');
-    Route::get('/dashboard', [\App\Http\Controllers\Admin\AdminDashboardController::class, 'dashboard'])->name('admin.dashboard');
+//    Route::get('/dashboard', [\App\Http\Controllers\Admin\AdminDashboardController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('/profile/edit', [\App\Http\Controllers\Admin\AdminProfileController::class, 'edit'])->name('admin.profile.edit');
     Route::patch('/profile', [\App\Http\Controllers\Admin\AdminProfileController::class, 'update'])->name('admin.profile.update');
     Route::get('/profile/reset-password', [\App\Http\Controllers\Admin\AdminProfileController::class, 'resetPassword'])->name('admin.profile.reset_password');
 
     Route::prefix('users')->group(function () {
-        Route::get('/', [\App\Http\Controllers\Admin\AdminUsersController::class, 'index'])->name('admin.users.index');
+        Route::get('/', [\App\Http\Controllers\Admin\UserController::class, 'index'])->name('admin.users.index');
+        Route::get('/datatable', [\App\Http\Controllers\Admin\UserController::class, 'datatable'])->name('admin.users.datatable');
         Route::post('/', [\App\Http\Controllers\Admin\AdminUsersController::class, 'store'])->name('admin.users.store');
         Route::get('/{id}/edit', [\App\Http\Controllers\Admin\AdminUsersController::class, 'edit'])->name('admin.users.edit');
         Route::get('/create', [\App\Http\Controllers\Admin\AdminUsersController::class, 'create'])->name('admin.users.create');
         Route::delete('/{id}', [\App\Http\Controllers\Admin\AdminUsersController::class, 'destroy'])->name('admin.users.destroy');
         Route::post('/{id}/toggle-approve', [\App\Http\Controllers\Admin\AdminUsersController::class, 'toggleApprove'])->name('admin.users.toggle_approve');
         Route::patch('/{id}/update', [\App\Http\Controllers\Admin\AdminUsersController::class, 'update'])->name('admin.users.update');
-        Route::get('/datatable', [\App\Http\Controllers\Admin\AdminUsersController::class, 'datatable'])->name('admin.users.datatable');
     });
     Route::prefix('categories')->group(function () {
-        Route::get('/', [\App\Http\Controllers\Admin\AdminCategoriesController::class, 'index'])->name('admin.categories.index');
+        Route::get('/', [\App\Http\Controllers\Admin\CategoryController::class, 'index'])->name('admin.categories.index');
+        Route::get('/datatable', [\App\Http\Controllers\Admin\CategoryController::class, 'datatable'])->name('admin.categories.datatable');
         Route::post('/', [\App\Http\Controllers\Admin\AdminCategoriesController::class, 'store'])->name('admin.categories.store');
         Route::get('/create', [\App\Http\Controllers\Admin\AdminCategoriesController::class, 'create'])->name('admin.categories.create');
-        Route::get('/datatable', [\App\Http\Controllers\Admin\AdminCategoriesController::class, 'datatable'])->name('admin.categories.datatable');
         Route::get('/{id}', [\App\Http\Controllers\Admin\AdminCategoriesController::class, 'edit'])->name('admin.categories.edit');
         Route::patch('/{id}/update', [\App\Http\Controllers\Admin\AdminCategoriesController::class, 'update'])->name('admin.categories.update');
         Route::delete('/{id}', [\App\Http\Controllers\Admin\AdminCategoriesController::class, 'delete'])->name('admin.categories.delete');

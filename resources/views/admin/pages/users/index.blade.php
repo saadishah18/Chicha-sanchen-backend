@@ -25,11 +25,11 @@
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th>Name</th>
-                                <th>Username</th>
+                                <th>First name</th>
+                                <th>Last name</th>
                                 <th>Email</th>
-                                <th>Gender</th>
-                                <th>Role</th>
+                                <th>DOB</th>
+{{--                                <th>Role</th>--}}
                                 <th class="no-sort">Actions</th>
                             </tr>
                         </thead>
@@ -51,22 +51,19 @@
                 serverSide: true,
                 ajax: "{{ route('admin.users.datatable') }}",
                 columns: [{
-                        data: 'user_id'
+                        data: 'id'
                     },
                     {
-                        data: 'display_name'
+                        data: 'fname'
                     },
                     {
-                        data: 'username'
+                        data: 'lname'
                     },
                     {
                         data: 'email'
                     },
                     {
-                        data: 'gender'
-                    },
-                    {
-                        data: 'user_role'
+                        data: 'dob'
                     },
                     {
                         data: 'actions'

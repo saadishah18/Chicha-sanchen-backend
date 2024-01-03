@@ -24,7 +24,7 @@ if (!function_exists('getCacheRememberTime')) {
 
 if (!function_exists('authUser')) {
 
-    function formatNumberauthUser()
+    function authUser()
     {
         if (auth()->check()) {
             return auth()->user();
@@ -41,4 +41,11 @@ if (!function_exists('formatNumber')) {
     }
 }
 
-
+if (!function_exists('generate_code')) {
+    function generate_code($length): string
+    {
+        $code = array_merge(range(0, 9), range(0, 9));
+        shuffle($code);
+        return implode(array_slice($code, 0, $length));
+    }
+}

@@ -29,47 +29,35 @@
         </a>
 
         <div id="dashboardDropdown"
-            class="bg-white  p-0 my-0 rounded collapse {{ request()->is(['*/dashboard', '*/posts/analytics*']) ? 'show' : '' }}"
+            class="bg-white  p-0 my-0 rounded collapse {{ request()->is(['*/dashboard', '*/categories*']) ? 'show' : '' }}"
             aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="collapse-inner ">
                 <a class="collapse-item {{ request()->is(['*/dashboard']) ? 'active' : '' }}"
                     href="{{ route('admin.dashboard') }}">Home</a>
 
-                <ul class="navbar-nav accordion" id="postAccordion">
+                <ul class="navbar-nav accordion" id="categories">
                     <li class="nav-item mb-0" style="min-height: 45px;">
                         <div>
-                            <a class="nav-link text-dark {{ request()->is('*/posts/analytics*') ? 'active' : 'collapsed' }}"
-                                href="#" data-toggle="collapse" data-target="#postsDropdown"
-                                aria-expanded="{{ request()->is(['*/posts/analytics*']) ? 'true' : 'false' }}"
-                                aria-controls="postsDropdown">
+                            <a class="nav-link text-dark {{ request()->is('*/categories*') ? 'active' : 'collapsed' }}"
+                                href="{{route('admin.categories.index')}}"
+                                >
                                 <i class="fas fa-fw fa-pencil-alt text-dark"></i>
-                                <span>Post View</span>
+                                <span>Categoris</span>
                             </a>
-
-                            <div id="postsDropdown"
-                                class="collapse {{ request()->is('*/posts/analytics*') ? 'show' : '' }}"
-                                aria-labelledby="headingThree" data-parent="#postAccordion">
-                                <div class="collapse-inner pl-0 pb-0 rounded">
-                                    <a class="collapse-item pl-0 pb-0 {{ request()->is('*/posts/analytics') ? 'active' : '' }}"
-                                        href="{{ route('admin.posts.analytics.index') }}"> <i
-                                            class="fas fa-fw fa-signal text-dark"></i> Analytics</a>
-                                    <a class="collapse-item pl-0 pb-0 {{ request()->is('*/posts/analytics/summary') ? 'active' : '' }}"
-                                        href="{{ route('admin.posts.analytics.summary') }}"> <i
-                                            class="fas fa-fw fa-chart-pie text-dark"></i> Summary</a>
-                                    <a class="collapse-item pl-0 pb-0 {{ request()->is('*/posts/analytics/rankings') ? 'active' : '' }}"
-                                        href="{{ route('admin.posts.analytics.rankings') }}"> <i
-                                            class="fas fa-fw fa-chart-area text-dark"></i> Ranking</a>
-                                    <a class="collapse-item pl-0 pb-0 {{ request()->is('*/posts/analytics/categories') ? 'active' : '' }}"
-                                        href="{{ route('admin.posts.analytics.categories') }}"> <i
-                                            class="fas fa-fw fa-signal text-dark"></i> Categories</a>
-                                    <a class="collapse-item pl-0 pb-0 {{ request()->is('*/posts/analytics/featured-marketing') ? 'active' : '' }}"
-                                        href="{{ route('admin.posts.analytics.featured_marketing') }}"> <i
-                                            class="fas fa-fw fa-chart-pie text-dark"></i> Featured Marketing</a>
-                                </div>
-                            </div>
+                        </div>
+                    </li>
+                    <li class="nav-item mb-0" style="min-height: 45px;">
+                        <div>
+                            <a class="nav-link text-dark {{ request()->is('*/users') ? 'active' : 'collapsed' }}"
+                               href="{{route('admin.users.index')}}"
+                            >
+                                <i class="fas fa-fw fa-user-alt text-dark"></i>
+                                <span>Users</span>
+                            </a>
                         </div>
                     </li>
                 </ul>
+
             </div>
         </div>
     </li>

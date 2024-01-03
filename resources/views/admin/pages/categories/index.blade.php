@@ -26,8 +26,9 @@
                             <tr>
                                 <th>#</th>
                                 <th>Category Name</th>
+                                <th>Parent Name</th>
                                 <th>Created At</th>
-                                <th class="no-sort">Actions</th>
+{{--                                <th class="no-sort">Actions</th>--}}
                             </tr>
                         </thead>
                     </table>
@@ -48,17 +49,20 @@
                 serverSide: true,
                 ajax: "{{ route('admin.categories.datatable') }}",
                 columns: [{
-                        data: 'category_id'
+                        data: 'id'
                     },
                     {
-                        data: 'category_name'
+                        data: 'name'
+                    },
+                    {
+                        data: 'parent'
                     },
                     {
                         data: 'created_at'
                     },
-                    {
-                        data: 'actions'
-                    },
+                    // {
+                    //     data: 'actions'
+                    // },
                 ],
                 columnDefs: [{
                     targets: 'no-sort',
