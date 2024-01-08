@@ -101,7 +101,7 @@
                     @enderror
                 </div>
                 <div class="mb-3 text-center">
-                    <button type="submit" class="btn btn-primary bg-theme"><Update>     </Update></button>
+                    <button type="submit" class="btn btn-primary bg-theme">Update</button>
                 </div>
             </div>
         </form>

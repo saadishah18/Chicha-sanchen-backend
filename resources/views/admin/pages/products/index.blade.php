@@ -2,8 +2,8 @@
 @section('content')
     <div class="container-fluid">
         <h1 class="h3 mb-2 text-gray-800">Manage Products</h1>
-        @if (session('status'))
-            @include('admin.pages.partials.alert', ['type' => 'success', 'message' => session('status')])
+        @if (session('success'))
+            @include('admin.pages.partials.alert', ['type' => 'success', 'message' => session('success')])
         @endif
         @if (session('error'))
             @include('admin.pages.partials.alert', ['type' => 'danger', 'message' => session('error')])

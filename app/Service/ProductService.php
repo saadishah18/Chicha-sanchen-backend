@@ -84,6 +84,41 @@ class ProductService
         return $product->refresh();
     }
 
+    public function update($request){
+        $model = Product::find($request->id);
+        if ($request->filled('name')){
+            $model->name = $request->name;
+        }
+//        $model->name = $request->name ?? '';
+        if ($request->filled('age')){
+            $model->category_id = $request->category_id;
+        }
+        if ($request->filled('description')){
+            $model->description = $request->description;
+        }
+        if ($request->filled('price')){
+            $model->price = $request->price;
+        }
+        if ($request->filled('is_featured')){
+            $model->is_featured = $request->is_featured == 'yes' ? 1 :0;
+        }
+
+        if ($request->has('image')) {
+
+            $image_validation = $this->image_validation($request->file('image'));
+
+            if ($image_validation) {
+                if ($model->image && file_exists(public_path('storage/' . $model->image))) {
+                    unlink(public_path('storage/' . $model->image));
+                }
+                $path = $request->file('image')->store('/profile', 'public');
+                $model->image = $path;
+            }
+        }
+
+        $model->update();
+    }
+
 
     public function image_validation($image)
     {

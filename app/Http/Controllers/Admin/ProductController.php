@@ -43,7 +43,7 @@ class ProductController extends Controller
             $result = $this->service->store($request);
             return redirect()->route('admin.products.index')->with('success','Product added successfully');
         }catch (\Exception $exception){
-            dd($exception->getMessage());
+            return redirect()->route('admin.products.index')->with('error',$exception->getMessage());
         }
     }
     public function edit(Product $id){
@@ -53,16 +53,17 @@ class ProductController extends Controller
             $categories = CategoryResource::collection($categories);
             return view('admin.pages.products.edit',compact('categories','product'));
         }catch (\Exception $exception){
-            dd($exception->getMessage());
+//            dd($exception->getMessage());
+            return redirect()->route('admin.products.index')->with('error',$exception->getMessage());
+
         }
     }
-    public function update(Product $product){
+    public function update(Request $request){
         try {
-            $categories = Category::whereNotNull('parent_id')->get();
-            $categories = CategoryResource::collection($categories);
-            return view('admin.pages.products.edit',compact('categories','product'));
+           $this->service->update($request);
+            return redirect()->route('admin.products.index')->with('success','Product updated successfully');
         }catch (\Exception $exception){
-            dd($exception->getMessage());
+            return redirect()->route('admin.products.index')->with('error',$exception->getMessage());
         }
     }
 }
