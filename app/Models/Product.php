@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
+use App\Developer\Traits\HasImageUpload;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use App\Developer\Traits\HasAttachment;
+//use App\Developer\Traits\HasVideoUrl;
 class Product extends Model
 {
     use HasFactory;
+    use HasAttachment, HasImageUpload;
 
     protected $guarded = ['id'];
 

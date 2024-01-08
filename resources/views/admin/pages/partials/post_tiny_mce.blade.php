@@ -13,16 +13,16 @@
             "advlist autolink link image media code lists print"
         ],
         toolbar1: "undo redo | bold italic underline | forecolor backcolor | alignleft aligncenter alignright  alignjustify | bullist numlist outdent indent",
-        toolbar2: "| image | link unlink |  media pdf pageembed | code | youtube  flickr |",
-        powerpaste_allow_local_images: true,
+        // toolbar2: "| image | link unlink |  media pdf pageembed | code | youtube  flickr |",
+        powerpaste_allow_local_images: false,
         powerpaste_word_import: 'prompt',
         powerpaste_html_import: 'prompt',
-        file_picker_types: 'file image media',
-        image_advtab: false,
-        external_filemanager_path: '/admin/laravel-filemanager?editor=tinymce5&type=Images',
-        filemanager_title: "Filemanager",
+        // file_picker_types: 'file image media',
+        // image_advtab: false,
+        // external_filemanager_path: '/admin/laravel-filemanager?editor=tinymce5&type=Images',
+        // filemanager_title: "Filemanager",
 
-        browser_spellcheck: true,
+        // browser_spellcheck: true,
 
         file_picker_callback : function(callback, value, meta) {
             var x = window.innerWidth || document.documentElement.clientWidth || document.getElementsByTagName('body')[0].clientWidth;

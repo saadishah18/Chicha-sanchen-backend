@@ -19,7 +19,7 @@ class ProductResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'category' => $this->category->name,
-            'image' => '',
+            'image' => $this->image !=null ? imagePath($this->image) : null,
             'price' => formatNumber($this->price),
             'size' => [],
             'shots' => [],

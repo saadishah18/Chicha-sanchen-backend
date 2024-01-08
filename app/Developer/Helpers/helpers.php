@@ -1,4 +1,5 @@
 <?php
+include "image_upload.php";
 
 if (!function_exists('getSettings')) {
     function getSettings($key)
@@ -47,5 +48,44 @@ if (!function_exists('generate_code')) {
         $code = array_merge(range(0, 9), range(0, 9));
         shuffle($code);
         return implode(array_slice($code, 0, $length));
+    }
+}
+
+if (!function_exists('imagePath')) {
+
+    function imagePath($path)
+    {
+            return asset('storage/').'/'.$path;
+    }
+}
+if (!function_exists('removeAnyDomainFromUrl')) {
+    function removeAnyDomainFromUrl($url)
+    {
+        $path = $url;
+        if (filter_var($url, FILTER_VALIDATE_URL)) {
+            $host = parse_url($url, PHP_URL_HOST);
+            if (!empty($host)) {
+                $path = parse_url($url, PHP_URL_PATH);
+            } else {
+                $path = $url;
+            }
+        }
+        return $path;
+    }
+}
+
+if (!function_exists('removeDomainFromUrl')) {
+    function removeDomainFromUrl($url)
+    {
+        $path = $url;
+        if (filter_var($url, FILTER_VALIDATE_URL)) {
+            $host = parse_url($url, PHP_URL_HOST);
+            if ($host == 'viconsortium.com') {
+                $path = parse_url($url, PHP_URL_PATH);
+            } else {
+                $path = $url;
+            }
+        }
+        return $path;
     }
 }

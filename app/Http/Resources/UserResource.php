@@ -9,6 +9,7 @@ class UserResource extends JsonResource
 {
     public function toArray($request)
     {
+        $actions = view('admin.pages.users.actions',['user' => $this])->render();
         return [
             'id' => $this->id,
             'fname' => $this->fname,
@@ -18,6 +19,7 @@ class UserResource extends JsonResource
             'formatted_dob' => Carbon::parse($this->dob)->toFormattedDateString(),
             'email_verified_at' => $this->email_verified_at,
             'created_at' => $this->created_at,
+            "actions" => $actions
         ];
     }
 }

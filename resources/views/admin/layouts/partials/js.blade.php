@@ -5,7 +5,7 @@
 
 <!-- Core plugin JavaScript-->
 <script src="{{asset('admin/vendor/jquery-easing/jquery.easing.min.js')}}"></script>
-<script src="{{asset('public/admin/js/sb-admin-2.js')}}"></script>
+<script src="{{asset('admin/js/sb-admin-2.js')}}"></script>
 
 <!-- Custom scripts for all pages-->
 <script>

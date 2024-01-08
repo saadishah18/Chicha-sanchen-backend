@@ -19,47 +19,43 @@
         no
     @endcan --}}
     {{-- @if (auth()->user()->can('access_admin_panel')) --}}
-    <li class="nav-item   {{ request()->is('*/dashboard') ? 'active' : '' }}" style="min-height: 45px;">
+{{--    <li class="nav-item   {{ request()->is('*/dashboard') ? 'active' : '' }}" style="min-height: 45px;">--}}
 
-        <a class="nav-link  {{ request()->is('*/dashboard') ? '' : 'collapsed' }}" href="#" data-toggle="collapse"
-            data-target="#dashboardDropdown" aria-expanded="{{ request()->is('*/dashboard') ? 'true' : 'false' }}"
-            aria-controls="dashboardDropdown">
+{{--        <a class="nav-link  {{ request()->is('*/dashboard') ? '' : 'collapsed' }}" href="#" data-toggle="collapse"--}}
+{{--            data-target="#dashboardDropdown" aria-expanded="{{ request()->is('*/dashboard') ? 'true' : 'false' }}"--}}
+{{--            aria-controls="dashboardDropdown">--}}
+{{--            <i class="fas fa-fw fa-tachometer-alt"></i>--}}
+{{--            <span>Dashboard</span>--}}
+{{--        </a>--}}
+{{--    </li>--}}
+    <li class="nav-item mb-0 {{ request()->is('*/dashboard*') ? 'active' : 'collapsed' }}" style="min-height: 45px;">
+        <a class="nav-link "
+           href="{{route('admin.dashboard')}}"
+        >
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span>
         </a>
+    </li>
+    <li class="nav-item mb-0 {{ request()->is('*/categories*') ? 'active' : 'collapsed' }}" style="min-height: 45px;">
+            <a class="nav-link "
+               href="{{route('admin.categories.index')}}"
+            >
+                <i class="fas fa-fw fa-pencil-alt "></i>
+                <span>Categoris</span>
+            </a>
+    </li>
 
-        <div id="dashboardDropdown"
-            class="bg-white  p-0 my-0 rounded collapse {{ request()->is(['*/dashboard', '*/categories*']) ? 'show' : '' }}"
-            aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-            <div class="collapse-inner ">
-                <a class="collapse-item {{ request()->is(['*/dashboard']) ? 'active' : '' }}"
-                    href="{{ route('admin.dashboard') }}">Home</a>
-
-                <ul class="navbar-nav accordion" id="categories">
-                    <li class="nav-item mb-0" style="min-height: 45px;">
-                        <div>
-                            <a class="nav-link text-dark {{ request()->is('*/categories*') ? 'active' : 'collapsed' }}"
-                                href="{{route('admin.categories.index')}}"
-                                >
-                                <i class="fas fa-fw fa-pencil-alt text-dark"></i>
-                                <span>Categoris</span>
-                            </a>
-                        </div>
-                    </li>
-                    <li class="nav-item mb-0" style="min-height: 45px;">
-                        <div>
-                            <a class="nav-link text-dark {{ request()->is('*/users') ? 'active' : 'collapsed' }}"
-                               href="{{route('admin.users.index')}}"
-                            >
-                                <i class="fas fa-fw fa-user-alt text-dark"></i>
-                                <span>Users</span>
-                            </a>
-                        </div>
-                    </li>
-                </ul>
-
-            </div>
-        </div>
+    <li class="nav-item {{ request()->is('*users*') ? 'active' : '' }}" style="min-height: 45px;">
+{{--        @can('create_comments', 'edit_own_comments', 'edit_any_comments', 'delete_own_comments', 'delete_any_comments')--}}
+            <a class="nav-link" href="{{route('admin.users.index')}}"><i
+                    class="fas fa-fw fa-user-alt"></i><span>Users</span></a>
+{{--        @endcan--}}
+    </li>
+    <li class="nav-item {{ request()->is('*products*') ? 'active' : '' }}" style="min-height: 45px;">
+{{--        @can('create_comments', 'edit_own_comments', 'edit_any_comments', 'delete_own_comments', 'delete_any_comments')--}}
+            <a class="nav-link" href="{{route('admin.products.index')}}"><i
+                    class="fas fa-fw fa-user-alt"></i><span>Products</span></a>
+{{--        @endcan--}}
     </li>
 
     @php
