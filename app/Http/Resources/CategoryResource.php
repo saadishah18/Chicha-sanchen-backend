@@ -25,7 +25,7 @@ class CategoryResource extends JsonResource
             'name' => $this->name,
             'child_count' => $this->children_count,
             'sub_cat_total_products' => $totalProducts,
-            'image' => '',
+            'image' => imagePath($this->image),
             'sub_categories' => CategoryResource::collection($this->children)
         ];
     }
