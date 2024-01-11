@@ -40,5 +40,4 @@ Route::get('category-products',[CategoryController::class,'categoryProduct']);
 
 Route::prefix('auth')->middleware('auth:sanctum',)->group(function () {
 //    return $request->user();
-
 });

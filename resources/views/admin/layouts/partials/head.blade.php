@@ -7,6 +7,7 @@
     <meta name="description" content="VIC Admin">
     <meta name="author" content="VIC amin">
 {{--    @include('components.partials.favicon_head_link')--}}
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>VIC Admin</title>
 

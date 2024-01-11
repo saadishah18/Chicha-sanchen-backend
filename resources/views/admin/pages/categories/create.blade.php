@@ -1,90 +1,120 @@
 @extends('admin.layouts.admin')
+@section('css')
+    <link href="{{ asset('admin/css/select2.min.css') }}" rel="stylesheet" />
+@endsection
 @section('content')
     <div class="container-fluid">
-        @include('admin.pages.partials.back_arrow',['backRoute' => route('admin.categories.index'),'text' => 'Create Category'])
-        <form method="post" action="{{ route('admin.categories.store') }}"  enctype="multipart/form-data">
+        @include('admin.pages.partials.back_arrow', [
+            'backRoute' => route('admin.categories.index'),
+            'text' => 'Create Category',
+        ])
+        <form method="post" action="{{ route('admin.categories.store') }}" enctype="multipart/form-data">
             @csrf
-            @if (session('status'))
-                @include('admin.pages.partials.alert',['type' => 'success', 'message' => session('status')])
-            @endif
-            @if (session('error'))
-                @include('admin.pages.partials.alert',['type' => 'danger', 'message' => session('error')])
-            @endif
-            <div class="form-group row w-100">
-                <div id="image-container" class="text-center mb-5 d-flex gap-4 w-100">
-                    <div class="col-sm-3">
-                        <label class="col-form-label"> Category Image </label>
-                    </div>
-                    <div class="w-100 border-dashed p-10 col-sm-9">
-                        <label class="col-form-label w-100 cursor-pointer" for="icons">
-                            <img width="100px" height="100px" id="image_preview" class="object-cover img-space" onerror="this.onerror=null; this.src=this.style.display = 'none'" src="" alt="Category Image">
+            <div class="col-lg-9">
+                @include('admin.components.partials.session_statuses')
 
-                            <div id="edit-icon" class="edit-icon  translate-middle hidden">
-                                <div><i class="fas fa-image"></i> Please upload feature image</div>
-                            </div>
+                @include('admin.components.form.input', [
+                  'fieldId' => 'name',
+                  'fieldTitle' => 'Name',
+                  'placeholder' => 'Please enter product name',
+                  'required' => true,
+                  'autofocus' => true,
+                  'autocomplete' => null,
+              ])
 
-                        </label>
-                        <p class="text-gray-500">Note: Only png,jpeg,gif and bmp file format are allowed.</p>
-                        <input id="icons"  name="icons" type="file" accept="image/png,image/jpg,image/jpeg,image/webp"  class="d-none" />
-                        @include('admin.components.error',['error' => 'icons'])
+                <div class="form-group row" id ="form">
+                    <label class="col-sm-2 col-form-label" for="type"><strong>Parent Category</strong></label>
+                    <div class="col-sm-10">
+                        <select name="category_id" id="parent_category_id"
+                                class="form-control select2 @error('parent_category_id') is-invalid @enderror"
+                                data-placeholder="Select Category">
+                            <option value="">Select Parent Category </option>
+                            @foreach ($categories as $category)
+                                <option value="{{ $category->id }}"
+                                    {{ old('parent_category_id') == $category->id ? 'selected' : '' }}>
+                                    {{ $category->name }}</option>
+                            @endforeach
+                        </select>
+                        @include('admin.components.error', ['error' => 'parent_category_id'])
                     </div>
                 </div>
-            </div>
 
-            @include('admin.components.form.input', [ 'fieldId' => 'category_name', 'fieldTitle' => 'Category Name','placeholder' => 'Enter category name', 'labelCols' => 'col-sm-3', 'inputCols' => 'col-sm-9','autofocus' => true,'required' => true, 'autocomplete' => 'name'])
+                <div class="form-group row">
+                    <label for="description" class="col-sm-2 col-form-label">Description<span class="text-danger">*</span></label>
+                    <div class="col-sm-10">
+                        <textarea class="form-control content" id="description" name="description" placeholder="Enter content">{{ old(htmlentities('description'), 'some content') }}</textarea>
+                        @error('description')
+                        <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
 
-            <div class="mb-3">
-                <button type="submit" class="btn btn-primary bg-theme">Save changes</button>
+                <div class="form-group row">
+                    <label for="attachment" class="col-sm-2 col-form-label">Image</label>
+                    <div class="col-sm-10">
+                        <input type="file" name="image" class="form-control" required="required" accept=".png, .jpg, .jpeg">
+                        @error('attachment')
+                        <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+
+
+                <div class="mb-3 text-center">
+                    <button type="submit" class="btn btn-primary bg-theme">Create</button>
+                </div>
             </div>
         </form>
 
     </div>
 @endsection
 @section('js')
+    @include('admin.pages.partials.post_tiny_mce')
+    {{--    @include('admin.pages.partials.post_date_time_picker_js')--}}
+    <script src="{{ asset('admin/js/select2.min.js') }}"></script>
+    {{--    <script src="{{ asset('js/slugify_4.js') }}"></script>--}}
+    {{--    <script src="{{ asset('admin/vendor/jquery/jquery.datetimepicker.js') }}"></script>--}}
 
-    <script>
-        const userImage = document.getElementById('image_preview');
-        const editIcon = document.getElementById('edit-icon');
-        const uploadInput = document.getElementById('icons');
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('.select2').select2();
 
-        userImage.addEventListener('mouseover', () => {
-            editIcon.classList.remove('hidden');
-        });
-
-        userImage.addEventListener('mouseout', () => {
-            editIcon.classList.add('hidden');
-        });
-
-        uploadInput.addEventListener('change', () => {
-            $('#image_preview').css('display','block');
-            const file = uploadInput.files[0];
-            const reader = new FileReader();
-
-            reader.onload = () => {
-                userImage.src = reader.result;
+            window.onbeforeunload = function() {
+                return "Are you sure you want to leave this page?";
             };
 
-            if (file) {
-                reader.readAsDataURL(file);
-            }
+            // Optionally, you can remove the confirmation dialog when a form is submitted
+            $('form').submit(function() {
+                window.onbeforeunload = null;
+            });
+
         });
+
+        // Function to check if the form is empty
+
     </script>
+    <script>
+        // const scheduleCheckbox = document.getElementById('is_scheduled');
+        // const placementAndNumberDiv = document.getElementById('placementAndNumber');
+        // const numberField = document.getElementById('numberField');
+
+        // // Function to toggle visibility of placement and number fields
+        // function togglePlacementAndNumber() {
+        //     if (scheduleCheckbox.checked) {
+        //         placementAndNumberDiv.style.display = 'block';
+        //         numberField.style.display = 'block';
+        //     } else {
+        //         placementAndNumberDiv.style.display = 'none';
+        //         numberField.style.display = 'none';
+        //     }
+        // }
+
+        // // Initially call the function to set the initial state
+        // togglePlacementAndNumber();
+
+        // // Add an event listener to the "Schedule" checkbox
+        // scheduleCheckbox.addEventListener('change', togglePlacementAndNumber);
+    </script>
+@endsection
 
 
-@endsection
-@section('css')
-    <style>
-    .border-dashed{
-        border:dashed;
-    }
-    .p-10{
-        padding: 4rem;
-    }
-    .cursor-pointer{
-        cursor: pointer;
-    }
-    .img-space{
-        margin: 1rem auto 1rem auto;
-    }
-    </style>
-@endsection

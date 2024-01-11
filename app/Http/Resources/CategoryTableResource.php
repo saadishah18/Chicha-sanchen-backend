@@ -16,6 +16,8 @@ class CategoryTableResource extends JsonResource
     public function toArray(Request $request): array
     {
 //        return parent::toArray($request);
+        $actions = view('admin.pages.categories.actions',['category' => $this])->render();
+
         if($this->parent == null){
            $parent = 'N/A';
         }else{
@@ -27,6 +29,7 @@ class CategoryTableResource extends JsonResource
             'parent' => $parent,
             'image' => '',
             'created_at' => Carbon::parse($this->created_at)->toFormattedDateString(),
+            'actions' => $actions,
         ];
     }
 }

@@ -20,8 +20,8 @@
             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <span class="mr-2 text-gray-600 small">{{authUser() ? authUser()->fname : ''}}</span>
-                <img class="img-profile rounded-circle"
-                     onerror="this.onerror=null; this.src=this.style.display = 'none';" src="{{ authUser()->image ?authUser()->getProfilePictureUrl() : 'sf'}}">
+{{--                <img class="img-profile rounded-circle"--}}
+{{--                     onerror="this.onerror=null; this.src=this.style.display = 'none';" src="{{ authUser()->image ?authUser()->getProfilePictureUrl() : 'sf'}}">--}}
             </a>
             <!-- Dropdown - User Information -->
             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"

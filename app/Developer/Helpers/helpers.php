@@ -1,4 +1,7 @@
 <?php
+
+use App\Service\Facades\Api;
+
 include "image_upload.php";
 
 if (!function_exists('getSettings')) {
@@ -87,5 +90,21 @@ if (!function_exists('removeDomainFromUrl')) {
             }
         }
         return $path;
+    }
+}
+
+function image_validation($image)
+{
+    if($image != null || $image  != ''){
+        $fileExtension = substr(strrchr($image->getClientOriginalName(), '.'), 1);
+        if ($fileExtension != 'jpg' && $fileExtension != 'jpeg' && $fileExtension != 'png' && $fileExtension != 'gif') {
+            return Api::error('Image extension should be jpeg,jpg,png,and gif');
+        }
+        $filesize = \File::size($image);
+        if ($filesize >= 1024 * 1024 * 20) {
+            return Api::error('Image size should less than 20 mb');
+        }
+
+        return true;
     }
 }

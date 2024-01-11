@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Service\CategoryService;
 use Illuminate\Http\Request;
 
@@ -34,7 +35,8 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        //
+        $categories = Category::whereNull('parent_id')->get();
+        return view('admin.pages.categories.create',compact('categories'));
     }
 
     /**
@@ -42,7 +44,17 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|max:255',
+            'description' => 'required|max:255',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Adjust the image validation rules as needed
+        ]);
+        try {
+            $this->service->store($request);
+            return redirect()->route('admin.categories.index')->with('success','Category created successfully');
+        }catch (\Exception $exception){
+            dd($exception->getMessage());
+        }
     }
 
     /**

@@ -54,12 +54,13 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::prefix('categories')->group(function () {
         Route::get('/', [\App\Http\Controllers\Admin\CategoryController::class, 'index'])->name('admin.categories.index');
         Route::get('/datatable', [\App\Http\Controllers\Admin\CategoryController::class, 'datatable'])->name('admin.categories.datatable');
-        Route::post('/', [\App\Http\Controllers\Admin\AdminCategoriesController::class, 'store'])->name('admin.categories.store');
-        Route::get('/create', [\App\Http\Controllers\Admin\AdminCategoriesController::class, 'create'])->name('admin.categories.create');
-        Route::get('/{id}', [\App\Http\Controllers\Admin\AdminCategoriesController::class, 'edit'])->name('admin.categories.edit');
-        Route::patch('/{id}/update', [\App\Http\Controllers\Admin\AdminCategoriesController::class, 'update'])->name('admin.categories.update');
-        Route::delete('/{id}', [\App\Http\Controllers\Admin\AdminCategoriesController::class, 'delete'])->name('admin.categories.delete');
+        Route::post('/', [\App\Http\Controllers\Admin\CategoryController::class, 'store'])->name('admin.categories.store');
+        Route::get('/create', [\App\Http\Controllers\Admin\CategoryController::class, 'create'])->name('admin.categories.create');
+        Route::get('/{id}', [\App\Http\Controllers\Admin\CategoryController::class, 'edit'])->name('admin.categories.edit');
+        Route::patch('/{id}/update', [\App\Http\Controllers\Admin\CategoryController::class, 'update'])->name('admin.categories.update');
+        Route::delete('/{id}', [\App\Http\Controllers\Admin\CategoryController::class, 'delete'])->name('admin.categories.delete');
     });
+
     Route::prefix('products')->group(function () {
         Route::get('/', [\App\Http\Controllers\Admin\ProductController::class, 'index'])->name('admin.products.index');
         Route::get('/datatable', [\App\Http\Controllers\Admin\ProductController::class, 'datatable'])->name('admin.products.datatable');
@@ -67,5 +68,15 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
         Route::post('/store', [\App\Http\Controllers\Admin\ProductController::class, 'store'])->name('admin.products.store');
         Route::get('/{id}/edit', [\App\Http\Controllers\Admin\ProductController::class, 'edit'])->name('admin.products.edit');
         Route::post('/update', [\App\Http\Controllers\Admin\ProductController::class, 'update'])->name('admin.products.update');
+    });
+
+    Route::prefix('addons')->group(function () {
+        Route::get('/', [\App\Http\Controllers\Admin\ProductAdOnsController::class, 'index'])->name('admin.addons.index');
+        Route::get('/datatable', [\App\Http\Controllers\Admin\ProductAdOnsController::class, 'datatable'])->name('admin.addons.datatable');
+        Route::get('/create', [\App\Http\Controllers\Admin\ProductAdOnsController::class, 'create'])->name('admin.addons.create');
+        Route::post('/store', [\App\Http\Controllers\Admin\ProductAdOnsController::class, 'store'])->name('admin.addons.store');
+        Route::get('/{id}/edit', [\App\Http\Controllers\Admin\ProductAdOnsController::class, 'edit'])->name('admin.addons.edit');
+        Route::post('/update', [\App\Http\Controllers\Admin\ProductAdOnsController::class, 'update'])->name('admin.addons.update');
+        Route::post('/assign-values', [\App\Http\Controllers\Admin\ProductAdOnsController::class, 'assignValues'])->name('admin.addons.assign-values');
     });
 });

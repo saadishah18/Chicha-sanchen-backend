@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('add_ons', function (Blueprint $table) {
+        Schema::create('add_ons_values', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name');
-            $table->boolean('is_active')->default(1);
-//            $table->integer('price');
+            $table->integer('add_on_id');
+            $table->string('value');
+            $table->float('price')->nullable();
             $table->timestamps();
         });
     }
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('add_ons');
+        Schema::dropIfExists('add_ons_values');
     }
 };

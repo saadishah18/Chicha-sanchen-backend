@@ -42,7 +42,6 @@ class CategoryService
         $totalRecordsWithFilter = clone $query;
         $totalRecordsWithFilter = $totalRecordsWithFilter->select('count(*) as allcount')->count();
 
-
         //Fetch records
         $records  = clone $query;
         $records = $records->orderBy($columnName,$columnSortOrder)
@@ -59,6 +58,28 @@ class CategoryService
             "aaData" => $data_arr
         );
 
-        return response()->json($response);    }
+        return response()->json($response);
+    }
+
+    public function store($request){
+        $data = $request->all();
+        $data['parent_id'] = $request['category_id'] ?? Null;
+        unset($data['category_id']);
+        if ($request->has('image')) {
+
+            $image_validation = image_validation($request->file('image'));
+
+            if ($image_validation) {
+                if ($data['image'] && file_exists(public_path('storage/' . $data['image']))) {
+                    unlink(public_path('storage/' . $data['image']));
+                }
+                $path = $request->file('image')->store('/category', 'public');
+                $data['image'] = $path;
+            }
+        }
+
+        $category = Category::create($data);
+        return $category;
+    }
 }
 

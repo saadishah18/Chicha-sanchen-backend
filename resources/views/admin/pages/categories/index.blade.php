@@ -4,17 +4,17 @@
         <h1 class="h3 mb-2 text-gray-800">Manage Categories</h1>
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                @can('create_category')
+{{--                @can('create_category')--}}
                     <a href="{{ route('admin.categories.create') }}" class="btn btn-success btn-icon-split">
                         <span class="icon text-white-50">
                             <i class="fas fa-plus"></i>
                         </span>
                         <span class="text">Add New Category</span>
                     </a>
-                @endcan
-                @if (session('status'))
+{{--                @endcan--}}
+                @if (session('success'))
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        {{ session('status') }}
+                        {{ session('success') }}
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 @endif
@@ -28,7 +28,7 @@
                                 <th>Category Name</th>
                                 <th>Parent Name</th>
                                 <th>Created At</th>
-{{--                                <th class="no-sort">Actions</th>--}}
+                                <th class="no-sort">Actions</th>
                             </tr>
                         </thead>
                     </table>
@@ -60,9 +60,9 @@
                     {
                         data: 'created_at'
                     },
-                    // {
-                    //     data: 'actions'
-                    // },
+                    {
+                        data: 'actions'
+                    },
                 ],
                 columnDefs: [{
                     targets: 'no-sort',
