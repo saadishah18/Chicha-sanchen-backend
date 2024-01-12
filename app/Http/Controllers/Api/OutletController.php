@@ -28,7 +28,7 @@ class OutletController extends Controller
         try {
             return $this->interface->detail($request);
         }catch (\Exception $exception){
-            dd($exception->getMessage());
+            dd($exception->getMessage(),$exception->getFile(),$exception->getLine(),$exception->getTrace());
             return Api::error($exception);
         }
     }

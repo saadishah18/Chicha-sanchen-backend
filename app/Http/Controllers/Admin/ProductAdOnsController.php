@@ -30,7 +30,13 @@ class ProductAdOnsController extends Controller
             $columnName = $columnName_arr[$columnIndex]['data']; // Column name
             $columnSortOrder = $order_arr[0]['dir']; // asc or desc
             $searchValue = $search_arr['value']; // Search value
-            $query= AddOn::query();
+            $query= AddOn::query()
+                ->whereNotIn('id', function ($query) {
+                    $query->select('parent_id')
+                        ->from('add_ons')
+                        ->whereNotNull('parent_id');
+//                        ->distinct();
+                });
             $query=$query->where(function ($q) use ($searchValue){
                 $q
                     ->orWhere('id', 'like', '%' .$searchValue . '%')

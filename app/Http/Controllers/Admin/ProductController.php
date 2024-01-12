@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CategoryResource;
 use App\Http\Resources\CategoryTableResource;
+use App\Models\AddOn;
 use App\Models\Category;
 use App\Models\Product;
 use App\Service\ProductService;
@@ -65,5 +66,13 @@ class ProductController extends Controller
         }catch (\Exception $exception){
             return redirect()->route('admin.products.index')->with('error',$exception->getMessage());
         }
+    }
+
+
+    public function assingAdOnToProductPage($id){
+        $product = Product::find($id);
+        $add_ons = AddOn::with(['children','values'])->get();
+//        dd($add_ons,$product);
+        return view('admin.pages.products.assign-add-ons',compact('product','add_ons'));
     }
 }

@@ -68,6 +68,7 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
         Route::post('/store', [\App\Http\Controllers\Admin\ProductController::class, 'store'])->name('admin.products.store');
         Route::get('/{id}/edit', [\App\Http\Controllers\Admin\ProductController::class, 'edit'])->name('admin.products.edit');
         Route::post('/update', [\App\Http\Controllers\Admin\ProductController::class, 'update'])->name('admin.products.update');
+        Route::get('/products/{id}/assign-add-ons', [\App\Http\Controllers\Admin\ProductController::class, 'assingAdOnToProductPage'])->name('admin.products.assign-add-on');
     });
 
     Route::prefix('addons')->group(function () {

@@ -17,3 +17,8 @@
     <i class="fas fa-trash"></i>
 </a>
 
+<a href="{{route('admin.products.assign-add-on',[$product->id])}}" title="Assign add ons" data-id="{{ $product->id }}"
+   class="btn btn-dark btn-circle assin add ons">
+    <i class="fas fa-arrow-alt-circle-up"></i>
+</a>
+
