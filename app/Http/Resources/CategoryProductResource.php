@@ -14,11 +14,12 @@ class CategoryProductResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-      return [
-           'id' => $this->id,
-           'name' => $this->name,
-           'category' => $this->category->name,
-           'image' => $this->image !=null ? imagePath($this->image) : null,
-       ];
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'category' => $this->category->name,
+            'image' => $this->image != null ? imagePath($this->image) : null,
+            'is_featured' => $this->is_featured
+        ];
     }
 }

@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\OutletController;
 use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\ProductController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -33,6 +34,8 @@ Route::post('/verify-email', [AuthController::class,'verifyEmail'])->name('verif
 Route::get('outlets',[OutletController::class,'index']);
 Route::get('outlet-menu',[OutletController::class,'detail']);
 Route::get('category-products',[CategoryController::class,'categoryProduct']);
+
+Route::get('outlet-featured-products',[ProductController::class,'featuredProducts']);
 //Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 ////    return $request->user();
 //    Route::get('outlets',[OutletController::class,'index']);
