@@ -3,11 +3,17 @@
 namespace App\Http\Resources;
 
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class UserResource extends JsonResource
+class UserTableResource extends JsonResource
 {
-    public function toArray($request)
+    /**
+     * Transform the resource into an array.
+     *
+     * @return array<string, mixed>
+     */
+    public function toArray(Request $request): array
     {
         $actions = view('admin.pages.users.actions',['user' => $this])->render();
         return [
@@ -19,7 +25,7 @@ class UserResource extends JsonResource
             'formatted_dob' => Carbon::parse($this->dob)->toFormattedDateString(),
             'email_verified_at' => $this->email_verified_at,
             'created_at' => $this->created_at,
-//            "actions" => $actions
+            "actions" => $actions
         ];
     }
 }
