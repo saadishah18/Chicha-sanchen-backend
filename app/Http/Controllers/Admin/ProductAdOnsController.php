@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\AdOnResource;
 use App\Models\AddOn;
 use App\Models\AddOnValue;
+use App\Models\ProductAdOns;
 use Illuminate\Http\Request;
 
 class ProductAdOnsController extends Controller
@@ -97,7 +98,6 @@ class ProductAdOnsController extends Controller
         try {
             $values = $request->values;
             foreach ($values as $key => $value){
-//                dd($request->all());
                 $matchThese = ['value' => $value, 'add_on_id' => $request->record_id,'price' => $request->price[$key]];
                 $model = AddOnValue::updateOrCreate($matchThese, ['add_on_id' => $request->record_id]);
             }
@@ -105,6 +105,26 @@ class ProductAdOnsController extends Controller
         }catch (\Exception $exception){
             return response()->json(['message' => $exception->getMessage(),'status' => 500],500);
         }
+    }
 
+    public function storeProductAdOns(Request $request){
+        try {
+            foreach ($request['add_on_id'] as $key => $addOnId) {
+                $addOnValues = $request['add_on_value_id'][$addOnId] ?? [];
+
+                foreach ($addOnValues as $valueId) {
+                   $data_to_save[] = [
+                        'product_id' => $request['product_id'],
+                        'add_on_id' => $addOnId,
+                        'value_id' => $valueId,
+                    ];
+                }
+            }
+            $product_ad_ons = ProductAdOns::insert($data_to_save);
+            return redirect()->route('admin.products.index')->with('success','Ad on assigned to product');
+        }catch (\Exception $exception){
+            dd($exception->getMessage());
+            return response()->json(['message' => $exception->getMessage(),'status' => 500],500);
+        }
     }
 }

@@ -72,7 +72,6 @@ class ProductController extends Controller
     public function assingAdOnToProductPage($id){
         $product = Product::find($id);
         $add_ons = AddOn::with(['children','values'])->get();
-//        dd($add_ons,$product);
         return view('admin.pages.products.assign-add-ons',compact('product','add_ons'));
     }
 }

@@ -15,6 +15,7 @@ return new class extends Migration
             $table->increments('id');
             $table->unsignedInteger('product_id');
             $table->unsignedInteger('add_on_id');
+            $table->unsignedInteger('value_id');
             $table->foreign('product_id')->references('id')->on('products');
             $table->foreign('add_on_id')->references('id')->on('add_ons');
             $table->timestamps();
