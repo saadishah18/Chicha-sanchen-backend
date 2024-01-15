@@ -8,6 +8,7 @@ use App\Http\Resources\CategoryTableResource;
 use App\Models\AddOn;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\ProductAdOns;
 use App\Service\ProductService;
 use Illuminate\Http\Request;
 
@@ -71,7 +72,9 @@ class ProductController extends Controller
 
     public function assingAdOnToProductPage($id){
         $product = Product::find($id);
-        $add_ons = AddOn::with(['children','values'])->get();
-        return view('admin.pages.products.assign-add-ons',compact('product','add_ons'));
+        $add_ons = AddOn::with(['children','values'])->whereDoesntHave('parent')->get();
+        $product_assigned_addons = ProductAdOns::where('product_id',$product->id)->get()->toArray();
+//        dd($product_assigned_addons);
+        return view('admin.pages.products.assign-add-ons',compact('product','add_ons','product_assigned_addons'));
     }
 }

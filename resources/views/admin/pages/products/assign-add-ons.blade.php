@@ -13,22 +13,63 @@
             @csrf
             <input type="hidden" name="product_id" value="{{$product->id}}">
             <div class="row">
-                {{--                <input type="hidden" name="newsTypeId" value="{{ $newsTypeId }}">--}}
-                {{--                @include('admin.components.partials.session_statuses')--}}
+                @php
+                    $add_on_ids = [];
+                    $value_ids = [];
+                    foreach ($product_assigned_addons as $key => $ad){
+//                        dd($ad);
+                        $add_on_ids[] = $ad['add_on_id']  ;
+                        $value_ids[] = $ad['value_id'];
+                    }
+                @endphp
                 @foreach($add_ons as $key => $addon)
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <div class="form-check form-check-inline">
                             <input class="form-check-input main-checkbox" type="checkbox" name="add_on_id[]" id="mainCheckbox{{$addon->id}}"
-                                   value="{{$addon->id}}" {{--{{ old('name') || $addon->is_featured == 1 ? 'checked' : '' }}--}} >
+                                   value="{{$addon->id}}" {{--{{ old('name') || $addon->is_featured == 1 ? 'checked' : '' }}--}} @if(in_array($addon->id, $add_on_ids)) checked @endif>
                             <label class="form-check-label" for="is_scheduled">{!! ucfirst($addon->name) !!}</label>
                         </div>
+                        @if(!empty($addon->children))
+                            <div class="col-md-12">
+                            @foreach($addon->children as $child)
+                                    <div class="col-md-6">
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input main-checkbox" type="checkbox"
+                                                   name="add_on_id[]" id="mainCheckbox{{$child->id}}"
+                                                   value="{{$child->id}}" {{--{{ old('name') || $addon->is_featured == 1 ? 'checked' : '' }}--}}
+                                                   @if(in_array($child->id, $add_on_ids)) checked @endif>
+                                            <label class="form-check-label"
+                                                   for="is_scheduled">{!! ucfirst($child->name) !!}</label>
+                                        </div>
+                                    </div>
+                                <ul>
+                                    @foreach($child->values as $i => $value)
+{{--                                        @dd($value,$value_ids, $add_on_ids)--}}
+                                        <li>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input addon-value-checkbox addon-{{$child->id}}" type="checkbox"
+                                                       name="add_on_value_id[{{$child->id}}][]" id="add_on_value_id"
+                                                       value="{{$value->id}}" {{--{{ old('name') || $addon->is_featured == 1 ? 'checked' : '' }}--}}
+                                                       @if(in_array($value->id, $value_ids)) checked @endif>
+                                                <label class="form-check-label"
+                                                       for="is_scheduled">{!! ucfirst($value->value) !!}
+                                                    <span><b>Price</b> {!! $value->price ?? 0 !!} AED</span>
+                                                </label>
+                                            </div>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            @endforeach
+                            </div>
+                        @endif
                         <ul>
                             @foreach($addon->values as $i => $value)
                                 <li>
                                     <div class="form-check form-check-inline">
                                         <input class="form-check-input addon-value-checkbox addon-{{$addon->id}}" type="checkbox"
                                                name="add_on_value_id[{{$addon->id}}][]" id="add_on_value_id"
-                                               value="{{$value->id}}" {{--{{ old('name') || $addon->is_featured == 1 ? 'checked' : '' }}--}} >
+                                               value="{{$value->id}}" {{--{{ old('name') || $addon->is_featured == 1 ? 'checked' : '' }}--}}
+                                               @if(in_array($value->id, $value_ids)) checked @endif>
                                         <label class="form-check-label"
                                                for="is_scheduled">{!! ucfirst($value->value) !!}
                                             <span><b>Price</b> {!! $value->price ?? 0 !!} AED</span>
