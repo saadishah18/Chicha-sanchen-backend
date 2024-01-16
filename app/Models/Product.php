@@ -23,4 +23,9 @@ class Product extends Model
     {
         return $this->belongsToMany(Outlet::class, 'product_outlets');
     }
+
+    public function addOns()
+    {
+        return $this->hasMany(ProductAdOns::class);
+    }
 }

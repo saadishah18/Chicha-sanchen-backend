@@ -23,4 +23,10 @@ class AddOn extends Model
     {
         return $this->hasMany(AddOn::class, 'parent_id');
     }
+
+    public function addOnValues()
+    {
+        return $this->hasMany(AddOnValue::class);
+    }
 }
+

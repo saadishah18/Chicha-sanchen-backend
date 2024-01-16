@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CategoryResource;
 use App\Http\Resources\FeaturedProductResource;
+use App\Http\Resources\ProductResource;
 use App\Models\Category;
 use App\Models\Outlet;
+use App\Models\Product;
 use App\Service\Facades\Api;
 use Illuminate\Http\Request;
 
@@ -38,5 +40,27 @@ class ProductController extends Controller
 //            ->get();
 //        dd($categories);
         return Api::response(['categories' => FeaturedProductResource::collection($categories),'product_count' => $outlet->products_count], 'Outlet categories');
+    }
+
+    public function productDetail($id){
+        try {
+            $product = Product::with('addOns.addOn')->find($id);
+            return Api::response(new ProductResource($product),'Product detail');
+        }catch (\Exception $exception){
+            return Api::server_error($exception);
+        }
+    }
+
+    public function searchProduct(Request $request){
+        try {
+            if (!Api::validate(['search' => 'required|max:15'])) {
+                return Api::validation_errors();
+            }
+            $products = Product::where('name','like','%'.$request->search.'%')->get();
+            return Api::response(ProductResource::collection($products),'Product detail');
+        }catch (\Exception $exception){
+            return Api::server_error($exception);
+        }
+
     }
 }

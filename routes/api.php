@@ -36,6 +36,9 @@ Route::get('outlet-menu',[OutletController::class,'detail']);
 Route::get('category-products',[CategoryController::class,'categoryProduct']);
 
 Route::get('outlet-featured-products',[ProductController::class,'featuredProducts']);
+Route::get('outlet-featured-products',[ProductController::class,'featuredProducts']);
+Route::get('product/{id}/detail',[ProductController::class,'productDetail']);
+Route::post('search-product',[ProductController::class,'searchProduct']);
 //Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 ////    return $request->user();
 //    Route::get('outlets',[OutletController::class,'index']);

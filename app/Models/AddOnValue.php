@@ -10,4 +10,9 @@ class AddOnValue extends Model
     use HasFactory;
     protected $table = 'add_ons_values';
     protected $guarded = ['id'];
+
+    public function addOn()
+    {
+        return $this->belongsTo(AddOn::class);
+    }
 }
