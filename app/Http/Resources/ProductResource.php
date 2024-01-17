@@ -17,6 +17,7 @@ class ProductResource extends JsonResource
         $result = [
             'id' => $this->id,
             'name' => $this->name,
+            'description' => strip_tags($this->description),
             'category' => $this->category->name,
             'parent_cat' => $this->category->parent != null ? $this->category->parent->name : null,
             'image' => $this->image !=null ? imagePath($this->image) : null,
