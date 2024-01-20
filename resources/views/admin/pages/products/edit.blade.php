@@ -71,7 +71,7 @@
                     <label for="attachment" class="col-sm-2 col-form-label">Image</label>
                     <div class="col-sm-10">
                         <img src="{{imagePath($product->image)}}" width="200px" height="200px">
-                        <input type="file" name="image" class="form-control" required="required" accept=".png, .jpg, .jpeg">
+                        <input type="file" name="image" class="form-control" accept=".png, .jpg, .jpeg">
                         @error('attachment')
                         <div class="text-danger">{{ $message }}</div>
                         @enderror
@@ -97,6 +97,20 @@
                         </div>
                     </div>
                     @error('is_featured')
+                    <div class="text-danger">{{ $message }}</div>
+                    @enderror
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label"></label>
+                    <div class="col-sm-10">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" name="in_stock" id="in_stock"
+                                   value="yes" {{ old('in_stock') == 'yes' || $product->in_stock == 1 ? 'checked' : '' }} >
+                            <label class="form-check-label" for="in_stock">Is Available</label>
+
+                        </div>
+                    </div>
+                    @error('in_stock')
                     <div class="text-danger">{{ $message }}</div>
                     @enderror
                 </div>

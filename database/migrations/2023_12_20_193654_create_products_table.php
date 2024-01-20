@@ -20,7 +20,7 @@ return new class extends Migration
             $table->float('price');
             $table->boolean('is_featured')->default(0);
             $table->boolean('is_active')->default(1);
-
+            $table->boolean('in_stock')->default(1);
             $table->foreign('category_id')->references('id')->on('categories');
             $table->timestamps();
         });

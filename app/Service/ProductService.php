@@ -101,6 +101,13 @@ class ProductService
         }
         if ($request->filled('is_featured')){
             $model->is_featured = $request->is_featured == 'yes' ? 1 :0;
+        }else{
+            $model->is_featured = 0;
+        }
+        if ($request->filled('in_stock')){
+            $model->in_stock = $request->in_stock == 'yes' ? 1 :0;
+        }else{
+            $model->in_stock = 0;
         }
 
         if ($request->has('image')) {

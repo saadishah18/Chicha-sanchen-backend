@@ -25,6 +25,7 @@ class ProductResource extends JsonResource
             'image' => $this->image !=null ? imagePath($this->image) : null,
             'price' => formatNumber($this->price),
             'is_featured' => $this->is_featured,
+            'in_stock' => $this->in_stock,
 //            'addOns' => $this->addOns ?$this->transformAddOns($this->addOns) : null,
             'addOns' => [],
         ];
