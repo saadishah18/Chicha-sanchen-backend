@@ -25,7 +25,9 @@
                         <thead>
                         <tr>
                             <th>#</th>
+                            <th>Parent</th>
                             <th>Name</th>
+                            <th>Values</th>
                             {{--                            <th>Description</th>--}}
                             <th class="no-sort">Actions</th>
                         </tr>
@@ -118,7 +120,13 @@
                     data: 'id'
                 },
                     {
+                        data: 'parent'
+                    },
+                    {
                         data: 'name'
+                    },
+                    {
+                        data: 'values'
                     },
 
                     {

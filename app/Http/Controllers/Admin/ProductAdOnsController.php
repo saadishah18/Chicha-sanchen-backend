@@ -109,18 +109,61 @@ class ProductAdOnsController extends Controller
 
     public function storeProductAdOns(Request $request){
         try {
-            foreach ($request['add_on_id'] as $key => $addOnId) {
-                $addOnValues = $request['add_on_value_id'][$addOnId] ?? [];
-
-                foreach ($addOnValues as $valueId) {
-                   $data_to_save[] = [
-                        'product_id' => $request['product_id'],
-                        'add_on_id' => $addOnId,
-                        'value_id' => $valueId,
-                    ];
+//            dd($request->all());
+            ProductAdOns::where('product_id',$request->product_id)->delete();
+            foreach ($request['add_on_value_id'] as $add_on_id => $values){
+                foreach ($values as $child_add_on_id => $value){
+                    if(is_array($value)){
+                        foreach ($value as $value_index => $val){
+                            $create_product_add_on_with_child = [
+                                'product_id' => $request['product_id'],
+                                'add_on_parent_id' => $add_on_id,
+                                'add_on_id' => $child_add_on_id,
+                                'value_id' => $val,
+                            ];
+                            ProductAdOns::create($create_product_add_on_with_child);
+                        }
+                    }else{
+                        $create_product_add = [
+                            'product_id' => $request['product_id'],
+                            'add_on_parent_id' => null,
+                            'add_on_id' => $add_on_id,
+                            'value_id' => $value,
+                        ];
+                    }
+                    ProductAdOns::create($create_product_add);
                 }
             }
-            $product_ad_ons = ProductAdOns::insert($data_to_save);
+           /* foreach ($request['add_on_id'] as $key => $addOnId) {
+                if($addOnId == 3) {
+                    $addOnChildIds = $request['add_on_child_id'][$addOnId] ?? [];
+
+                    if (count($addOnChildIds) == 0) {
+                        $addOnValues = $request['add_on_value_id'][$addOnId] ?? [];
+                        $detail = AddOn::find($addOnId);
+                        foreach ($addOnValues as $key => $value) {
+//                        dd($key, $addOnValues[$key], $addOnValues[$values]);
+//                        foreach ($values as $value){
+//                            $value_array[] = [
+//                                'product_id' => $request['product_id'],
+//                                'add_on_parent_id' => $detail->add_on_parent_id,
+//                                'add_on_id' => $addOnId,
+//                                'value_id' => $value,
+//                            ];
+//                        }
+                            echo $value;
+                        }
+                    } else {
+                        dd($addOnChildIds);
+                        foreach ($addOnChildIds as $key => $child) {
+                            $addOnValues = $request['add_on_child_id'][$child] ?? [];
+                            dd($addOnValues);
+                            $detail = AddOn::find($valueId);
+
+                        }
+                    }
+                }
+            }*/
             return redirect()->route('admin.products.index')->with('success','Ad on assigned to product');
         }catch (\Exception $exception){
             dd($exception->getMessage());
