@@ -45,6 +45,9 @@ class ProductController extends Controller
     public function productDetail($id){
         try {
             $product = Product::with('addOns.addOn')->find($id);
+//            $product = Product::with(['addOns.addOn', 'addOns.children.addOn'])->find($id);
+//            $product = Product::with('addOns')->find($id);
+
             return Api::response(new ProductResource($product),'Product detail');
         }catch (\Exception $exception){
             return Api::server_error($exception);

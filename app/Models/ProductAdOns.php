@@ -35,5 +35,8 @@ class ProductAdOns extends Model
     {
         return $this->belongsTo(AddOnValue::class);
     }
-
+    public function children()
+    {
+        return $this->hasMany(ProductAdOns::class, 'add_on_parent_id', 'add_on_id');
+    }
 }

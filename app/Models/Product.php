@@ -28,4 +28,15 @@ class Product extends Model
     {
         return $this->hasMany(ProductAdOns::class);
     }
+
+    public function assgiendParentAddOns()
+    {
+        return $this->hasMany(ProductAdOns::class,'add_on_parent_id');
+    }
+
+    public function addOnsNew()
+    {
+        return $this->belongsToMany(AddOn::class, 'product_add_ons')
+            ->withPivot('value_id'); // Assuming you have a value_id column in your pivot table
+    }
 }
