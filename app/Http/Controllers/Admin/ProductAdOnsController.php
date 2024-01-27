@@ -109,7 +109,6 @@ class ProductAdOnsController extends Controller
 
     public function storeProductAdOns(Request $request){
         try {
-//            dd($request->all());
             ProductAdOns::where('product_id',$request->product_id)->delete();
             foreach ($request['add_on_value_id'] as $add_on_id => $values){
                 foreach ($values as $child_add_on_id => $value){
@@ -134,36 +133,6 @@ class ProductAdOnsController extends Controller
                     ProductAdOns::create($create_product_add);
                 }
             }
-           /* foreach ($request['add_on_id'] as $key => $addOnId) {
-                if($addOnId == 3) {
-                    $addOnChildIds = $request['add_on_child_id'][$addOnId] ?? [];
-
-                    if (count($addOnChildIds) == 0) {
-                        $addOnValues = $request['add_on_value_id'][$addOnId] ?? [];
-                        $detail = AddOn::find($addOnId);
-                        foreach ($addOnValues as $key => $value) {
-//                        dd($key, $addOnValues[$key], $addOnValues[$values]);
-//                        foreach ($values as $value){
-//                            $value_array[] = [
-//                                'product_id' => $request['product_id'],
-//                                'add_on_parent_id' => $detail->add_on_parent_id,
-//                                'add_on_id' => $addOnId,
-//                                'value_id' => $value,
-//                            ];
-//                        }
-                            echo $value;
-                        }
-                    } else {
-                        dd($addOnChildIds);
-                        foreach ($addOnChildIds as $key => $child) {
-                            $addOnValues = $request['add_on_child_id'][$child] ?? [];
-                            dd($addOnValues);
-                            $detail = AddOn::find($valueId);
-
-                        }
-                    }
-                }
-            }*/
             return redirect()->route('admin.products.index')->with('success','Ad on assigned to product');
         }catch (\Exception $exception){
             dd($exception->getMessage());

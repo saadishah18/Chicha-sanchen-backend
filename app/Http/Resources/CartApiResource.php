@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class AdOnValueResource extends JsonResource
+class CartApiResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -14,10 +14,11 @@ class AdOnValueResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+//        return parent::toArray($request);
         return [
-            'id' => $this->id,
-            'name' => $this->value, // Replace with your actual value attribute
-            'price' => $this->price, // Replace with your actual value attribute
+            'cart_id' => $this->id,
+            'user_id' => $this->user_id,
+            'cart_items' => CartItemResource::collection($this->cartItems)
         ];
     }
 }

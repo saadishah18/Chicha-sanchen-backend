@@ -64,4 +64,11 @@ class User extends Authenticatable implements MustVerifyEmail
         Notification::route('mail', $this->email)
             ->notify(new VerifyEmailApiNotification($data));
     }
+
+    // User.php
+    public function cart()
+    {
+        return $this->hasOne(Cart::class);
+    }
+
 }

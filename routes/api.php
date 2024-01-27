@@ -46,4 +46,7 @@ Route::post('search-product',[ProductController::class,'searchProduct']);
 
 Route::prefix('auth')->middleware('auth:sanctum',)->group(function () {
 //    return $request->user();
+    Route::post('add-to-cart',[\App\Http\Controllers\Api\CartController::class,'addToCart']);
+    Route::get('cart-detail',[\App\Http\Controllers\Api\CartController::class,'cartDetail']);
+
 });
