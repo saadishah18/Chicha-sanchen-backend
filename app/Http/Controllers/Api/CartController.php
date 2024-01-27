@@ -13,6 +13,7 @@ use App\Models\CartItem;
 use App\Service\Facades\Api;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class CartController extends Controller
 {
@@ -23,6 +24,10 @@ class CartController extends Controller
             $result = DB::transaction(function () use ($requestData,$cart_id) {
                 if($cart_id != null){
                     $cart = Cart::find($cart_id);
+//                    dd($cart == null);
+                    if($cart == null){
+                      return false;
+                    }
                 }else{
                     $cart = Cart::create([
                         'user_id' => auth()->id(),
@@ -88,10 +93,15 @@ class CartController extends Controller
                         }
                     }
                 }
-
                 return $cart;
             });
-            return Api::response($result->refresh(), 'Product added to cart');
+            if($result != false){
+                return Api::response($result, 'Product added to cart');
+            }else{
+                Log::error(['Cart log id' => $cart_id]);
+                Log::error(['db transaction result' => $result]);
+                return Api::error('Cart could not be made! Contact admin');
+            }
         } catch (\Exception $exception) {
 //            return Api::error($exception->getMessage());
             dd($exception->getMessage(), $exception->getLine(), $exception->getFile());

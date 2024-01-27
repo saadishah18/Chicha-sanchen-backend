@@ -19,7 +19,7 @@ return new class extends Migration
             $table->unsignedBigInteger('add_on_id');
             $table->string('value_name'); // Ensure this column is defined as string
             $table->unsignedBigInteger('value_id');
-            $table->decimal('value_price', 8, 2);
+            $table->decimal('value_price', 8, 2)->nullable();
             $table->timestamps();
         });
     }
