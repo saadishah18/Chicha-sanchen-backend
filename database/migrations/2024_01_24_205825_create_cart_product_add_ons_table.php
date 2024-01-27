@@ -18,7 +18,7 @@ return new class extends Migration
             $table->unsignedInteger('parent_add_on_id')->nullable();
             $table->unsignedInteger('child_add_on_id')->nullable();
             $table->unsignedInteger('add_on_value_id');
-            $table->unsignedInteger('add_value_price');
+            $table->float('add_value_price',8,2);
             $table->timestamps();
         });
     }

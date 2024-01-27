@@ -17,7 +17,7 @@ return new class extends Migration
             $table->unsignedInteger('product_id');
             $table->unsignedInteger('category_id');
             $table->unsignedInteger('product_price');
-            $table->unsignedInteger('product_with_add_on_price');
+            $table->float('product_with_add_on_price');
             $table->timestamps();
         });
     }
