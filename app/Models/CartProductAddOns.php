@@ -25,7 +25,8 @@ class CartProductAddOns extends Model
         return $this->belongsTo(Product::class);
     }
 
-    public function values(){
-
+    public function cartAdOnValues(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(CartAdOnValues::class,'cart_product_add_on_id');
     }
 }

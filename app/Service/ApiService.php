@@ -19,7 +19,7 @@ class ApiService
             'data' => $data,
             'status' => $status,
             'message' => $message,
-            'payload' => request()->all(),
+//            'payload' => request()->all(),
         ], $status);
     }
 

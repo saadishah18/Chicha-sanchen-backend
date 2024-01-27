@@ -35,7 +35,7 @@ class CartItem extends Model
         return $this->belongsTo(AddOn::class,'child_add_on_id');
     }
 
-    public function addOnValueDetail(){
-        return $this->belongsTo(AddOn::class,'add_on_value_id');
-    }
+//    public function addOnValueDetail(){
+//        return $this->belongsTo(AddOn::class,'add_on_value_id');
+//    }
 }
