@@ -17,6 +17,11 @@ class CartItem extends Model
         return $this->hasMany(CartProductAddOns::class);
     }
 
+    public function cartAddOnValues(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(CartAddOnValue::class);
+    }
+
     public function product(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Product::class);
