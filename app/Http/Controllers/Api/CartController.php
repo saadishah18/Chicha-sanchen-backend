@@ -17,18 +17,18 @@ use Illuminate\Support\Facades\Log;
 
 class CartController extends Controller
 {
-    public function addToCart(Request $request,$cart_id = null)
+    public function addToCart(Request $request, $cart_id = null)
     {
         try {
             $requestData = $request->all();
-            $result = DB::transaction(function () use ($requestData,$cart_id) {
-                if($cart_id != null){
+            $result = DB::transaction(function () use ($requestData, $cart_id) {
+                if ($cart_id != null) {
                     $cart = Cart::find($cart_id);
 //                    dd($cart == null);
-                    if($cart == null){
-                      return false;
+                    if ($cart == null) {
+                        return false;
                     }
-                }else{
+                } else {
                     $cart = Cart::create([
                         'user_id' => auth()->id(),
                     ]);
@@ -84,7 +84,7 @@ class CartController extends Controller
                                     'cart_item_id' => $cartItem->id,
                                     'product_id' => $cartDetail['product_id'],
                                     'add_on_id' => $val['add_on_id'],
-                                    'value_name' =>  $valueName,
+                                    'value_name' => $valueName,
                                     'value_id' => $val['id'],
                                     'value_price' => $val['price'],
                                 ]);
@@ -95,9 +95,9 @@ class CartController extends Controller
                 }
                 return $cart;
             });
-            if($result != false){
-                return Api::response($result, 'Product added to cart');
-            }else{
+            if ($result != false) {
+                return Api::response(new CartApiResource($result), 'Product added to cart');
+            } else {
                 Log::error(['Cart log id' => $cart_id]);
                 Log::error(['db transaction result' => $result]);
                 return Api::error('Cart could not be made! Contact admin');
@@ -124,6 +124,46 @@ class CartController extends Controller
             }
         } catch (\Exception $exception) {
             dd($exception->getMessage(), $exception->getLine(), $exception->getFile());
+            return Api::server_error($exception);
+        }
+    }
+
+    public function removeCartItem($item_id)
+    {
+        try {
+            $cart_item = CartItem::find($item_id);
+            if ($cart_item) {
+                $cart = Cart::find($cart_item->cart_id);
+                $cart_item->delete();
+                $new_cart = $cart->refresh();
+//                dd($new_cart->cartItems != null ,$new_cart->cartItems->count());
+                if ($new_cart->cartItems != null && $new_cart->cartItems->count() && $new_cart->cartItems->isNotEmpty()) {
+                    return Api::response(new CartApiResource($new_cart), 'Cart Deleted');
+                } else {
+                    $user = auth()->user();
+                    Cart::where('user_id', $user->id)->delete();
+                    return Api::response([], 'Cart Deleted');
+                }
+            } else {
+                return Api::error('Cart item not found');
+            }
+        } catch (\Exception $exception) {
+            return Api::server_error($exception);
+        }
+    }
+
+    public function clearCart()
+    {
+        try {
+            $user = auth()->user();
+            $cart = Cart::where('user_id', $user->id)->first();
+            if($cart){
+                $cart->delete();
+                return Api::response([], 'Cart Deleted');
+            }else{
+             return Api::error('Cart record not found');
+            }
+        } catch (\Exception $exception) {
             return Api::server_error($exception);
         }
     }

@@ -48,6 +48,7 @@ Route::prefix('auth')->middleware('auth:sanctum',)->group(function () {
 //    return $request->user();
     Route::post('add-to-cart/{id?}',[\App\Http\Controllers\Api\CartController::class,'addToCart']);
     Route::get('cart-detail',[\App\Http\Controllers\Api\CartController::class,'cartDetail']);
-//    Route::get('cart-detail',[\App\Http\Controllers\Api\CartController::class,'removeCartItem']);
+    Route::get('remove-item/{item_id}',[\App\Http\Controllers\Api\CartController::class,'removeCartItem']);
+    Route::get('clear-cart',[\App\Http\Controllers\Api\CartController::class,'clearCart']);
 
 });
