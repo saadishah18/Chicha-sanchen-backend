@@ -43,52 +43,52 @@ class CartController extends Controller
                     ]);
 
                     $cart->cartItems()->save($cartItem);
+                    if(isset($cartDetail['add_ons'])){
+                        foreach ($cartDetail['add_ons'] as $addon) {
+                            if (isset($addon['sub_add_ons']) && count($addon['sub_add_ons'])) {
+                                foreach ($addon['sub_add_ons'] as $sub_add_on) {
+                                    $cartProductAddOn = $cartItem->cartProductAddOns()->create([
+                                        'product_id' => $cartDetail['product_id'],
+                                        'parent_add_on_id' => $addon['add_on_id'],
+                                        'child_add_on_id' => $sub_add_on['add_on_id'],
+                                    ]);
 
-                    foreach ($cartDetail['add_ons'] as $addon) {
-                        if (isset($addon['sub_add_ons']) && count($addon['sub_add_ons'])) {
-                            foreach ($addon['sub_add_ons'] as $sub_add_on) {
+                                    foreach ($sub_add_on['values'] as $value_index => $val) {
+                                        $addOnValue = AddOnValue::find($val['id']);
+                                        $valueName = $addOnValue ? $addOnValue->value : ''; // Assuming 'value' is the string column in your AddOnValue model
+                                        $obj = new CartAddOnValue([
+                                            'cart_id' => $cart->id,
+                                            'cart_item_id' => $cartItem->id,
+                                            'product_id' => $cartDetail['product_id'],
+                                            'add_on_id' => $val['add_on_id'],
+                                            'value_name' => is_array($valueName) ? json_encode($valueName) : $valueName,
+                                            'value_id' => $val['id'],
+                                            'value_price' => $val['price'],
+                                        ]);
+                                        $obj->save();
+                                    }
+                                }
+                            } else {
                                 $cartProductAddOn = $cartItem->cartProductAddOns()->create([
                                     'product_id' => $cartDetail['product_id'],
-                                    'parent_add_on_id' => $addon['add_on_id'],
-                                    'child_add_on_id' => $sub_add_on['add_on_id'],
+                                    'parent_add_on_id' => null,
+                                    'child_add_on_id' => $addon['add_on_id'],
                                 ]);
-
-                                foreach ($sub_add_on['values'] as $value_index => $val) {
+                                foreach ($addon['values'] as $value_index => $val) {
                                     $addOnValue = AddOnValue::find($val['id']);
                                     $valueName = $addOnValue ? $addOnValue->value : ''; // Assuming 'value' is the string column in your AddOnValue model
+
                                     $obj = new CartAddOnValue([
                                         'cart_id' => $cart->id,
                                         'cart_item_id' => $cartItem->id,
                                         'product_id' => $cartDetail['product_id'],
                                         'add_on_id' => $val['add_on_id'],
-                                        'value_name' => is_array($valueName) ? json_encode($valueName) : $valueName,
+                                        'value_name' => $valueName,
                                         'value_id' => $val['id'],
                                         'value_price' => $val['price'],
                                     ]);
                                     $obj->save();
                                 }
-                            }
-                        } else {
-                            $cartProductAddOn = $cartItem->cartProductAddOns()->create([
-                                'product_id' => $cartDetail['product_id'],
-                                'parent_add_on_id' => null,
-                                'child_add_on_id' => $addon['add_on_id'],
-                            ]);
-
-                            foreach ($addon['values'] as $value_index => $val) {
-                                $addOnValue = AddOnValue::find($val['id']);
-                                $valueName = $addOnValue ? $addOnValue->value : ''; // Assuming 'value' is the string column in your AddOnValue model
-
-                                $obj = new CartAddOnValue([
-                                    'cart_id' => $cart->id,
-                                    'cart_item_id' => $cartItem->id,
-                                    'product_id' => $cartDetail['product_id'],
-                                    'add_on_id' => $val['add_on_id'],
-                                    'value_name' => $valueName,
-                                    'value_id' => $val['id'],
-                                    'value_price' => $val['price'],
-                                ]);
-                                $obj->save();
                             }
                         }
                     }
