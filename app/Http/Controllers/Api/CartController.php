@@ -123,7 +123,7 @@ class CartController extends Controller
                 return Api::error('User Cart not exists');
             }
         } catch (\Exception $exception) {
-            dd($exception->getMessage(), $exception->getLine(), $exception->getFile());
+//            dd($exception->getMessage(), $exception->getLine(), $exception->getFile());
             return Api::server_error($exception);
         }
     }

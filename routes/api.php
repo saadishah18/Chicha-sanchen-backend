@@ -51,6 +51,7 @@ Route::prefix('auth')->middleware('auth:sanctum',)->group(function () {
     Route::get('remove-item/{item_id}',[\App\Http\Controllers\Api\CartController::class,'removeCartItem']);
     Route::get('clear-cart',[\App\Http\Controllers\Api\CartController::class,'clearCart']);
     Route::post('place-order',[\App\Http\Controllers\Api\OrderController::class,'placeOrder']);
+    Route::get('order-history',[\App\Http\Controllers\Api\OrderController::class,'orderHistory']);
     Route::post('re-order/{order_id}',[\App\Http\Controllers\Api\OrderController::class,'reOrder']);
 
 });

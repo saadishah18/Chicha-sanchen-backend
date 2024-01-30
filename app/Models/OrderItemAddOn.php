@@ -11,4 +11,8 @@ class OrderItemAddOn extends Model
 
     protected $guarded = ['id'];
 
+    public function values(){
+        return $this->hasMany(OrderItemAddOnValue::class);
+    }
+
 }

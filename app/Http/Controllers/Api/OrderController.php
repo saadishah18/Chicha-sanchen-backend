@@ -107,6 +107,24 @@ class OrderController extends Controller
         }
 
     }
+    public function orderHistory(){
+        try {
+            $user = auth()->user();
+            $orders = $user->orders;
+
+            // Check if the $cart exists before attempting to use it
+            if (!$orders->isEmpty()) {
+                return Api::response(OrderApiResource::collection($orders), 'Orders history');
+            } else {
+                // Handle the case when the cart is not found
+                // You might want to return a response or perform other actions
+                return Api::error('User Cart not exists');
+            }
+        }catch (\Exception $exception){
+            return Api::server_error($exception);
+        }
+    }
+
     public function reOrder($id){
         try {
             $requestData = $request->all();
