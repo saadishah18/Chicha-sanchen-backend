@@ -81,4 +81,15 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
         Route::get('/assign-values', [\App\Http\Controllers\Admin\ProductAdOnsController::class, 'assignValues'])->name('admin.addons.assign-values');
         Route::post('/assign-values-to-products', [\App\Http\Controllers\Admin\ProductAdOnsController::class, 'storeProductAdOns'])->name('admin.addons.assign-values-to-products');
     });
+
+    Route::prefix('orders')->group(function () {
+        Route::get('/', [\App\Http\Controllers\Admin\OrderController::class, 'index'])->name('admin.addons.index');
+        Route::get('/datatable', [\App\Http\Controllers\Admin\OrderController::class, 'datatable'])->name('admin.addons.datatable');
+//        Route::get('/create', [\App\Http\Controllers\Admin\ProductAdOnsController::class, 'create'])->name('admin.addons.create');
+//        Route::post('/store', [\App\Http\Controllers\Admin\ProductAdOnsController::class, 'store'])->name('admin.addons.store');
+//        Route::get('/{id}/edit', [\App\Http\Controllers\Admin\ProductAdOnsController::class, 'edit'])->name('admin.addons.edit');
+//        Route::post('/update', [\App\Http\Controllers\Admin\ProductAdOnsController::class, 'update'])->name('admin.addons.update');
+//        Route::get('/assign-values', [\App\Http\Controllers\Admin\ProductAdOnsController::class, 'assignValues'])->name('admin.addons.assign-values');
+//        Route::post('/assign-values-to-products', [\App\Http\Controllers\Admin\ProductAdOnsController::class, 'storeProductAdOns'])->name('admin.addons.assign-values-to-products');
+    });
 });

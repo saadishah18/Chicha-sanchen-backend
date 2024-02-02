@@ -30,7 +30,7 @@ class OrderAddOnsResource extends JsonResource
             'child_add_on_id' => $this->child_add_on_id,
             'child_add_on_name' => $this->child_add_on_id != null ? AddOn::find($this->child_add_on_id)->name : null,
             'sub_add_ons' => SubAdOnResource::collection($sub_addons),
-            'values' => $this->child_add_on_id == null ? OrderAdOnValueResource::collection($values) : []
+            'values' => $this->parent_add_on_id == null ? OrderAdOnValueResource::collection($values) : []
         ];
     }
 }
