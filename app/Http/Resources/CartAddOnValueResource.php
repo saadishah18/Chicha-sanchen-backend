@@ -16,9 +16,9 @@ class CartAddOnValueResource extends JsonResource
     {
         return [
             'add_on_id' => $this->add_on_id,
-            'value_id' => $this->value_id,
+            'id' => $this->value_id,
             'value_name' => $this->value_name,
-            'value_price' => $this->value_price,
+            'price' => $this->value_price,
         ];
     }
 }

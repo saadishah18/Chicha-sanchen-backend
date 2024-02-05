@@ -26,7 +26,7 @@ class CartItemResource extends JsonResource
             'category_id' => $this->category_id,
             'category_name' => $this->category->name,
             'product_price' => $this->product_price,
-            'addOns' => CartAdOnsResource::collection($this->cartProductAddOns)
+            'add_ons' => CartAdOnsResource::collection($this->cartProductAddOns)
         ];
 
 //        $get_add_ons = CartProductAddOns::where('cart_item_id',$this->id)->get();

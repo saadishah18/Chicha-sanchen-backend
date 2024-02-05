@@ -25,10 +25,11 @@ class CartAdOnsResource extends JsonResource
            'cart_item_id' => $this->cart_item_id,
            'product_id' => $this->product_id,
            'product_name' => $this->product->name,
+           'add_on_id' => $this->parent_add_on_id,
            'parent_add_on_id' => $this->parent_add_on_id,
            'parent_add_on_name' => $this->parent_add_on_id != null ? AddOn::find($this->parent_add_on_id)->name : null,
-           'child_add_on_id' => $this->child_add_on_id,
-           'child_add_on_name' => $this->child_add_on_id != null ? AddOn::find($this->child_add_on_id)->name : null,
+//           'child_add_on_id' => $this->child_add_on_id,
+//           'child_add_on_name' => $this->child_add_on_id != null ? AddOn::find($this->child_add_on_id)->name : null,
            'sub_add_ons' => $this->parent_add_on_id != null ?  CartSubAddOnResource::collection($sub_addons) : [],
            'values' => $this->parent_add_on_id == null ? CartAddOnValueResource::collection($values) : [],
        ];
