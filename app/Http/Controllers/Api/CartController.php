@@ -103,8 +103,8 @@ class CartController extends Controller
                 return Api::error('Cart could not be made! Contact admin');
             }
         } catch (\Exception $exception) {
-//            return Api::error($exception->getMessage());
-            dd($exception->getMessage(), $exception->getLine(), $exception->getFile());
+            return Api::error($exception->getMessage());
+//            dd($exception->getMessage(), $exception->getLine(), $exception->getFile());
         }
 
     }
