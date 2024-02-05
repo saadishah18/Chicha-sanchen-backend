@@ -13,6 +13,8 @@ use App\Models\Product;
 use App\Service\Facades\Api;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Stripe\PaymentIntent;
+use Stripe\Stripe;
 
 class OrderController extends Controller
 {
@@ -26,7 +28,6 @@ class OrderController extends Controller
                     'order_date' => now()->toDateString(),
                     'payment_status' => 'Pending',
                 ]);
-
 
                 foreach ($requestData['items'] as $orderDetail) {
                     $product = Product::find($orderDetail['product_id']);
@@ -98,9 +99,31 @@ class OrderController extends Controller
                 return $order;
             });
             if ($result != false) {
-                return Api::response(new OrderApiResource($result), 'Order Created');
+                // Set up the Stripe API key
+                Stripe::setApiKey(config('services.stripe.secret'));
+//                $paymentIntent = $result->createSetupIntent(['payment_method_types' => ['card']]);
+
+                // Calculate the total amount including system fees (3%)
+//                $systemFeePercentage = 3;
+//                $systemFees = ($coffeeAmount * $systemFeePercentage) / 100;
+//                $totalAmount = $coffeeAmount + $systemFees;
+
+                // Determine the currency (assuming AED for this example)
+                $currency = 'AED';
+
+                // Create a PaymentIntent with the specified amount, currency, and payment method types
+
+                $totalAmount = $result->price;
+                $paymentIntent = PaymentIntent::create([
+                    'amount' => $totalAmount * 100, // Amount is in cents
+                    'currency' => $currency,
+                    'payment_method_types' => ['card'],
+                ]);
+
+
+                return Api::response(['order' => new OrderApiResource($result),'payment_intent' => $paymentIntent], 'Order Created');
             } else {
-                return Api::error('Cart could not be made! Contact admin');
+                return Api::error('Order could not be made! Contact admin');
             }
         }catch (\Exception $exception){
             dd($exception->getMessage());
