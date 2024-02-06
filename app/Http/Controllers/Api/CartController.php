@@ -21,6 +21,7 @@ class CartController extends Controller
     {
         try {
             ini_set('memory_limit', '256M');
+            set_time_limit(120);
 
             $requestData = $request->all();
             $result = DB::transaction(function () use ($requestData, $cart_id) {
@@ -114,6 +115,7 @@ class CartController extends Controller
     public function cartDetail(Request $request)
     {
         ini_set('memory_limit', '256M');
+        set_time_limit(120);
 
         try {
             $user = auth()->user();
@@ -136,6 +138,7 @@ class CartController extends Controller
     {
         try {
             ini_set('memory_limit', '256M');
+            set_time_limit(120);
 
             $cart_item = CartItem::find($item_id);
             if ($cart_item) {
