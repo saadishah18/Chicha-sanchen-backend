@@ -19,6 +19,7 @@ class OrderController extends Controller
     public function placeOrder(Request $request){
         try {
             $requestData = $request->all();
+//            dd($requestData);
             $result = DB::transaction(function () use ($requestData) {
                 $order = Order::create([
                     'user_id' => auth()->id(),
@@ -26,7 +27,6 @@ class OrderController extends Controller
                     'order_date' => now()->toDateString(),
                     'payment_status' => 'Pending',
                 ]);
-
 
                 foreach ($requestData['items'] as $orderDetail) {
                     $product = Product::find($orderDetail['product_id']);
@@ -41,8 +41,8 @@ class OrderController extends Controller
                     ]);
 
                     $order->orderItems()->save($orderItem);
-
                     foreach ($orderDetail['add_ons'] as $addon) {
+
                         if (isset($addon['sub_add_ons']) && count($addon['sub_add_ons'])) {
                             foreach ($addon['sub_add_ons'] as $sub_add_on) {
                                 $orderItemAddOn = $orderItem->orderItemAddOns()->create([
@@ -69,7 +69,8 @@ class OrderController extends Controller
                                 }
                             }
                         } else {
-                            $orderItemAddOn = $orderItem->cartProductAddOns()->create([
+//                            dd($orderDetail,'here');
+                            $orderItemAddOn = $orderItem->orderItemAddOns()->create([
                                 'order_id' => $order->id,
                                 'product_id' => $orderDetail['product_id'],
                                 'parent_add_on_id' => null,
