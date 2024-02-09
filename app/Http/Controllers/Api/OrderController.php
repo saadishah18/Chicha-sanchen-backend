@@ -18,7 +18,6 @@ class OrderController extends Controller
 {
     public function placeOrder(Request $request){
         try {
-            dd('here');
             $requestData = $request->all();
             $result = DB::transaction(function () use ($requestData) {
                 $order = Order::create([
