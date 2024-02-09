@@ -17,11 +17,13 @@ class CartItemResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-//        dd($this);
+        $product_item_price = $this->calculateTotalPrice();
+
         $result = [
             'cart_item_id' => $this->id,
             'product_id' => $this->product_id,
             'product_name' => $this->product->name,
+            'product_item_price' => $product_item_price,
             'product_image' => $this->product && $this->product->image !=null ? imagePath($this->product->image) : null,
             'category_id' => $this->category_id,
             'category_name' => $this->category->name,
@@ -30,5 +32,20 @@ class CartItemResource extends JsonResource
         ];
         return $result;
 
+    }
+
+
+    private function calculateTotalPrice()
+    {
+        $totalPrice = $this->product_price;
+
+        // Calculate total price from cart items
+        foreach ($this->cartAddOnValues as $cartProductAddOn) {
+//                foreach ($cartProductAddOn->cartAdOnValues as $cartAdOnValue) {
+//                    $totalPrice += $cartAdOnValue->value_price;
+            $totalPrice += $cartProductAddOn->value_price;
+//                }
+        }
+        return $totalPrice;
     }
 }
