@@ -18,6 +18,7 @@ class OrderController extends Controller
 {
     public function placeOrder(Request $request){
         try {
+            dd('here');
             $requestData = $request->all();
             $result = DB::transaction(function () use ($requestData) {
                 $order = Order::create([
@@ -103,7 +104,7 @@ class OrderController extends Controller
                 return Api::error('Cart could not be made! Contact admin');
             }
         }catch (\Exception $exception){
-            dd($exception->getMessage());
+            dd($exception->getMessage(),$exception->getLine(),$exception->getMessage());
         }
 
     }
