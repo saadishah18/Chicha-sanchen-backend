@@ -10,7 +10,7 @@ class Cart extends Model
     use HasFactory;
     protected $guarded = ['id'];
 
-    protected $with = ['cartItems'];
+//    protected $with = ['cartItems'];
 
     public function cartItems()
     {

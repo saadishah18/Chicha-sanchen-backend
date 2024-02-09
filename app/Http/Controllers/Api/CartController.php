@@ -98,11 +98,9 @@ class CartController extends Controller
                 }
                 return $cart;
             });
-            if ($result != false) {
+            if ($result != false){
                 return Api::response(new CartApiResource($result), 'Product added to cart');
             } else {
-                Log::error(['Cart log id' => $cart_id]);
-                Log::error(['db transaction result' => $result]);
                 return Api::error('Cart could not be made! Contact admin');
             }
         } catch (\Exception $exception) {

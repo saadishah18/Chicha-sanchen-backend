@@ -17,7 +17,7 @@ class CartItemResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-//        dd($this->cartProductAddOns);
+//        dd($this);
         $result = [
             'cart_item_id' => $this->id,
             'product_id' => $this->product_id,
@@ -26,7 +26,7 @@ class CartItemResource extends JsonResource
             'category_id' => $this->category_id,
             'category_name' => $this->category->name,
             'product_price' => $this->product_price,
-            'add_ons' => CartAdOnsResource::collection($this->cartProductAddOns)
+            'add_ons' => CartAdOnsResource::collection($this->cartProductAddOns->unique('parent_add_on_id'))
         ];
         return $result;
 

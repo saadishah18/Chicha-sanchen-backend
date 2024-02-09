@@ -18,9 +18,9 @@ class CartSubAddOnResource extends JsonResource
         $values = CartAddOnValue::where('cart_item_id',$this->cart_item_id)->where('add_on_id',$this->child_add_on_id)->get();
 
         return [
-            'parent_add_on_id' => $this->parent_add_on_id,
+//            'parent_add_on_id' => $this->parent_add_on_id,
             'add_on_id' => $this->child_add_on_id,
-            'child_add_on_id' => $this->child_add_on_id,
+//            'child_add_on_id' => $this->child_add_on_id,
             'values' => CartAddOnValueResource::collection($values),
         ];
     }

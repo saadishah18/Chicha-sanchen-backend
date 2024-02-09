@@ -12,16 +12,26 @@ class CartApiResource extends JsonResource
      *
      * @return array<string, mixed>
      */
-    public function toArray(Request $request): array
+    public function toArray(Request $request,$type = null): array
     {
-//        return parent::toArray($request);
+        $path = ltrim(request()->path(), '/');
+        $lastSegment = basename($path);//        return parent::toArray($request);
+
+        if($lastSegment == 'cart-detail'){
+            $items = $this->cartItems;
+
+        }else{
+            $items = $this->cartItems()->latest()->first();
+        }
         $totalPrice = $this->calculateTotalPrice();
 
         return [
             'cart_id' => $this->id,
             'user_id' => $this->user_id,
             'total_price' => $totalPrice,
-            'cart_items' => CartItemResource::collection($this->cartItems)
+            'cart_items' => $items instanceof \Illuminate\Database\Eloquent\Model
+                ? [new CartItemResource($items)]
+                : CartItemResource::collection($items)
         ];
     }
 
