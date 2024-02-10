@@ -128,7 +128,6 @@ class OrderController extends Controller
                     'order_type' => $requestData['order_type'],
                     'order_unique_id' => generateUniqueOrderId(),
                 ]);
-
                 foreach ($cart_items as $item_index => $item) {
                     $product = Product::find($item['product_id']);
                     $category = Category::find($item['category_id']);
@@ -198,6 +197,10 @@ class OrderController extends Controller
                 return $order;
             });
             if ($result != false) {
+                $user = auth()->user();
+                $cart = Cart::where('user_id', $user->id)->first();
+                if($cart)
+                    $cart->delete();
                 return Api::response(new OrderApiResource($result), 'Order Created');
             } else {
                 return Api::error('Cart could not be made! Contact admin');
