@@ -10,7 +10,7 @@ class CartItem extends Model
     use HasFactory;
     protected $guarded = ['id'];
 
-//    protected $with = ['cartProductAddOns'];
+    protected $with = ['cartProductAddOns'];
 
     public function cartProductAddOns(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
