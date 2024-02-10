@@ -208,8 +208,8 @@ class OrderController extends Controller
         }catch (\Exception $exception){
             dd($exception->getMessage(),$exception->getLine(),$exception->getFile(),$exception->getTrace());
         }
-
     }
+
     public function reOrder($id){
         try {
             $old_order = Order::find($id);
