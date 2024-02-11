@@ -24,7 +24,6 @@ class OrderController extends Controller
     public function placeOrderOld(Request $request){
         try {
             $requestData = $request->all();
-//            dd($requestData);
             $result = DB::transaction(function () use ($requestData) {
                 $order = Order::create([
                     'user_id' => auth()->id(),
@@ -119,6 +118,7 @@ class OrderController extends Controller
             $requestData = $request->all();
             $get_cart_detail = Cart::find($requestData['cart_id']);
             $cart_items = $get_cart_detail->cartItems;
+
             $result = DB::transaction(function () use ($requestData, $cart_items) {
                 $order = Order::create([
                     'user_id' => auth()->id(),
@@ -128,6 +128,7 @@ class OrderController extends Controller
                     'order_type' => $requestData['order_type'],
                     'order_unique_id' => generateUniqueOrderId(),
                 ]);
+
                 foreach ($cart_items as $item_index => $item) {
                     $product = Product::find($item['product_id']);
                     $category = Category::find($item['category_id']);
@@ -139,9 +140,14 @@ class OrderController extends Controller
                         'category_name' => $category->name,
                         'product_price' => $item['product_price'],
                     ]);
+
                     $order->orderItems()->save($orderItem);
-                    foreach ($item['cartProductAddOns'] as $addon) {
-                        $sub_add_ons = CartProductAddOns::where('cart_item_id', $item->id)->where('parent_add_on_id', $addon->parent_add_on_id)->distinct('parent_add_on_id')->get();
+//                    dd($orderItem, $item,$item['cartProductAddOns'] );
+                    foreach ($item['cartProductAddOns'] as $addOn_key => $addon) {
+                        $sub_add_ons = collect();
+                        if($addon->parent_add_on_id != null){
+                            $sub_add_ons = CartProductAddOns::where('cart_item_id', $item->id)->where('parent_add_on_id', $addon->parent_add_on_id)->distinct('parent_add_on_id')->get();
+                        }
                         if (count($sub_add_ons)) {
                             foreach ($sub_add_ons as $sub_add_on) {
                                 $values = CartAddOnValue::where('cart_item_id', $item->id)->where('add_on_id', $sub_add_on->child_add_on_id)->get();
@@ -168,17 +174,17 @@ class OrderController extends Controller
                                 }
                             }
                         } else {
+                            $values = CartAddOnValue::where('cart_item_id', $item->id)->where('add_on_id', $addon->child_add_on_id)->get();
                             $orderItemAddOn = $orderItem->orderItemAddOns()->create([
                                 'order_id' => $order->id,
                                 'product_id' => $item['product_id'],
                                 'parent_add_on_id' => null,
                                 'child_add_on_id' => $addon['child_add_on_id'],
                             ]);
-
-                            foreach ($addon['values'] as $value_index => $val) {
-                                $addOnValue = AddOnValue::find($val['id']);
+                            foreach ($values as $value_index => $val) {
+                                $addOnValue = AddOnValue::find($val['value_id']);
+//                                dd($val,$addOnValue);
                                 $valueName = $addOnValue ? $addOnValue->value : ''; // Assuming 'value' is the string column in your AddOnValue model
-
                                 $obj = new OrderItemAddOnValue([
                                     'order_id' => $order->id,
                                     'order_item_id' => $orderItem->id,

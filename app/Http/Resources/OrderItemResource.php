@@ -21,7 +21,7 @@ class OrderItemResource extends JsonResource
            'category_id' => $this->category_id,
            'category_name' => $this->category->name,
            'product_price' => $this->product_price,
-           'addOns' => OrderAddOnsResource::collection($this->orderItemAddOns->unique('parent_add_on_id')),
+           'addOns' => OrderAddOnsResource::collection($this->orderItemAddOns->unique('child_add_on_id')),
        ];
     }
 }
