@@ -24,6 +24,7 @@ class CartController extends Controller
             set_time_limit(120);
 
             $requestData = $request->all();
+            Log::info(['add_to_cart' => $requestData]);
             $result = DB::transaction(function () use ($requestData, $cart_id) {
                 if ($cart_id != null) {
                     $cart = Cart::find($cart_id);

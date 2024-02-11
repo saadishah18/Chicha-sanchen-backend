@@ -19,7 +19,7 @@ return new class extends Migration
             $table->unsignedInteger('product_id');
             $table->unsignedInteger('add_on_id');
             $table->string('value_name');
-            $table->float('value_price');
+            $table->float('value_price')->nullable();
             $table->timestamps();
         });
     }

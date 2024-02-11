@@ -35,7 +35,7 @@ Route::get('outlets',[OutletController::class,'index']);
 Route::get('outlet-menu',[OutletController::class,'detail']);
 Route::get('category-products',[CategoryController::class,'categoryProduct']);
 
-Route::get('outlet-featured-products',[ProductController::class,'featuredProducts']);
+//Route::get('outlet-featured-products',[ProductController::class,'featuredProducts']);
 Route::get('outlet-featured-products',[ProductController::class,'featuredProducts']);
 Route::get('product/{id}/detail',[ProductController::class,'productDetail']);
 Route::post('search-product',[ProductController::class,'searchProduct']);
