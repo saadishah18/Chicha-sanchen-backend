@@ -117,6 +117,9 @@ class OrderController extends Controller
         try {
             $requestData = $request->all();
             $get_cart_detail = Cart::find($requestData['cart_id']);
+            if($get_cart_detail == null){
+                return Api::error('Cart is empty');
+            }
             $cart_items = $get_cart_detail->cartItems;
 
             $result = DB::transaction(function () use ($requestData, $cart_items) {
