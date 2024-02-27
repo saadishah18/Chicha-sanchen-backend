@@ -15,10 +15,13 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         User::insert([
-            ['fname' => 'John','lname' => 'Doe', 'email' => 'john@example.com', 'password' => Hash::make('password')],
-            // ... Add more records ...
-            ['fname' => 'Jane','lname' => 'Doe', 'email' => 'jane@example.com', 'password' => Hash::make('password')]
-            // Repeat this pattern for 10 users
+            [
+                'fname' => 'admin',
+                'lname' => 'super',
+                'email' => 'admin@domain.com',
+                'password' => Hash::make('12345678'),
+                'role' => 'admin'
+            ],
         ]);
     }
 }

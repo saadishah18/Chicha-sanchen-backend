@@ -35,7 +35,7 @@ Route::get('outlets',[OutletController::class,'index']);
 Route::get('outlet-menu',[OutletController::class,'detail']);
 Route::get('category-products',[CategoryController::class,'categoryProduct']);
 
-Route::get('outlet-featured-products',[ProductController::class,'featuredProducts']);
+//Route::get('outlet-featured-products',[ProductController::class,'featuredProducts']);
 Route::get('outlet-featured-products',[ProductController::class,'featuredProducts']);
 Route::get('product/{id}/detail',[ProductController::class,'productDetail']);
 Route::post('search-product',[ProductController::class,'searchProduct']);
@@ -46,12 +46,14 @@ Route::post('search-product',[ProductController::class,'searchProduct']);
 
 Route::prefix('auth')->middleware('auth:sanctum',)->group(function () {
 //    return $request->user();
+    Route::post('logout', [ProfileController::class, 'logout']);
+
     Route::post('add-to-cart/{id?}',[\App\Http\Controllers\Api\CartController::class,'addToCart']);
     Route::get('cart-detail',[\App\Http\Controllers\Api\CartController::class,'cartDetail']);
     Route::get('remove-item/{item_id}',[\App\Http\Controllers\Api\CartController::class,'removeCartItem']);
     Route::get('clear-cart',[\App\Http\Controllers\Api\CartController::class,'clearCart']);
     Route::post('place-order',[\App\Http\Controllers\Api\OrderController::class,'placeOrder']);
     Route::get('order-history',[\App\Http\Controllers\Api\OrderController::class,'orderHistory']);
-    Route::post('re-order/{order_id}',[\App\Http\Controllers\Api\OrderController::class,'reOrder']);
+    Route::get('re-order/{order_id}',[\App\Http\Controllers\Api\OrderController::class,'reOrder']);
 
 });

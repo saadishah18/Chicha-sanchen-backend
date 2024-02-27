@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class CartProductAddOns extends Model
 {
     use HasFactory;
+
     protected $guarded = ['id'];
 
     public function parent(): \Illuminate\Database\Eloquent\Relations\BelongsTo

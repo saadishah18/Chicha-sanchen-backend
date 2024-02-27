@@ -108,3 +108,23 @@ function image_validation($image)
         return true;
     }
 }
+
+
+function generateUniqueOrderId() {
+//    // Generate a UUID and remove hyphens
+//    $uuid = str_replace('-', '', \Illuminate\Support\Str::uuid());
+//
+//    // Optionally prefix the UUID with a character or string
+//    return 'ORD-' . $uuid;
+
+    // Customize format as needed
+    $format = 'ORD-' . date('Ymd') . '-';
+
+    // Attempt to create unique number with a loop
+    do {
+        $uniqueId = $format . str_pad(mt_rand(1000, 9999), 4, '0', STR_PAD_LEFT);
+        $existingOrder = \App\Models\Order::where('order_unique_id', $uniqueId)->first();
+    } while ($existingOrder);
+
+    return $uniqueId;
+}

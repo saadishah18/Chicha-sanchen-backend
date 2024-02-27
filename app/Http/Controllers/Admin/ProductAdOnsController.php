@@ -15,7 +15,6 @@ class ProductAdOnsController extends Controller
         return view('admin.pages.adOns.index');
     }
 
-
     public function datatable(Request $request){
         try {
             $draw = $request->get('draw');
@@ -79,7 +78,7 @@ class ProductAdOnsController extends Controller
     }
 
     public function create(){
-        return view('admin.pages.adOns.index');
+        return view('admin.pages.adOns.create');
     }
 
     public function edit($id){

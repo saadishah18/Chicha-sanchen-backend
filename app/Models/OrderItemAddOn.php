@@ -12,7 +12,7 @@ class OrderItemAddOn extends Model
     protected $guarded = ['id'];
 
     public function values(){
-        return $this->hasMany(OrderItemAddOnValue::class);
+        return $this->hasMany(OrderItemAddOnValue::class,'order_item_add_ons_id');
     }
 
 }

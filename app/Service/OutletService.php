@@ -38,8 +38,7 @@ class OutletService implements OutletInterface
 
         $outletId = $request->id;
         $outlet = Outlet::withCount('products')->find($outletId);
-//        dd($total_products);
-        $categories = Category::whereDoesntHave('parent') // Select only parent categories
+        $categories = Category::whereDoesntHave('parent')
         ->withCount(['children as children_count']) // Count the number of child categories
         ->with(['children.products' => function ($query) use ($outletId) {
             // Filter products in the specific outlet

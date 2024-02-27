@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('product_add_ons', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('product_id');
+            $table->unsignedInteger('add_on_parent_id')->nullable();
             $table->unsignedInteger('add_on_id');
             $table->unsignedInteger('value_id');
             $table->foreign('product_id')->references('id')->on('products');

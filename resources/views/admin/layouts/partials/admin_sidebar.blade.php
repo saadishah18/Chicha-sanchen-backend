@@ -63,12 +63,10 @@
                     class="fas fa-fw fa-user-alt"></i><span>Products Ad Ons</span></a>
 {{--        @endcan--}}
     </li>
-    <li class="nav-item {{ request()->is('*orders*') ? 'active' : '' }}" style="min-height: 45px;">
-{{--        @can('create_comments', 'edit_own_comments', 'edit_any_comments', 'delete_own_comments', 'delete_any_comments')--}}
-            <a class="nav-link" href="{{route('admin.orders.index')}}"><i
-                    class="fas fa-fw fa-user-alt"></i><span>Orders</span></a>
-{{--        @endcan--}}
-    </li>
+{{--    <li class="nav-item {{ request()->is('*orders*') ? 'active' : '' }}" style="min-height: 45px;">--}}
+{{--            <a class="nav-link" href="{{route('admin.orders.index')}}"><i--}}
+{{--                    class="fas fa-fw fa-user-alt"></i><span>Orders</span></a>--}}
+{{--    </li>--}}
 
     @php
         // Check if the user has permissions for any of the sub-options

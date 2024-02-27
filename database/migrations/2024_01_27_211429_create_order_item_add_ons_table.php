@@ -16,8 +16,8 @@ return new class extends Migration
             $table->unsignedInteger('order_id');
             $table->unsignedInteger('order_item_id');
             $table->unsignedInteger('product_id');
-            $table->unsignedInteger('parent_add_on_id');
-            $table->unsignedInteger('child_add_on_id');
+            $table->unsignedInteger('parent_add_on_id')->nullable();
+            $table->unsignedInteger('child_add_on_id')->nullable();
             $table->timestamps();
         });
     }

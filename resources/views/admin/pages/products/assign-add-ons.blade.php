@@ -16,6 +16,7 @@
                 @php
                     $add_on_ids = [];
                     $value_ids = [];
+                    $add_on_parent_ids = [];
                     foreach ($product_assigned_addons as $key => $ad){
                         $add_on_parent_ids[] = $ad['add_on_parent_id']  ;
                         $add_on_ids[] = $ad['add_on_id']  ;

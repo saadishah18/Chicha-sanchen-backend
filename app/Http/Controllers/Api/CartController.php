@@ -20,7 +20,11 @@ class CartController extends Controller
     public function addToCart(Request $request, $cart_id = null)
     {
         try {
+            ini_set('memory_limit', '256M');
+            set_time_limit(120);
+
             $requestData = $request->all();
+            Log::info(['add_to_cart' => $requestData]);
             $result = DB::transaction(function () use ($requestData, $cart_id) {
                 if ($cart_id != null) {
                     $cart = Cart::find($cart_id);
@@ -95,11 +99,9 @@ class CartController extends Controller
                 }
                 return $cart;
             });
-            if ($result != false) {
+            if ($result != false){
                 return Api::response(new CartApiResource($result), 'Product added to cart');
             } else {
-                Log::error(['Cart log id' => $cart_id]);
-                Log::error(['db transaction result' => $result]);
                 return Api::error('Cart could not be made! Contact admin');
             }
         } catch (\Exception $exception) {
@@ -111,6 +113,9 @@ class CartController extends Controller
 
     public function cartDetail(Request $request)
     {
+        ini_set('memory_limit', '256M');
+        set_time_limit(120);
+
         try {
             $user = auth()->user();
             $cart = $user->cart;
@@ -131,6 +136,9 @@ class CartController extends Controller
     public function removeCartItem($item_id)
     {
         try {
+            ini_set('memory_limit', '256M');
+            set_time_limit(120);
+
             $cart_item = CartItem::find($item_id);
             if ($cart_item) {
                 $cart = Cart::find($cart_item->cart_id);

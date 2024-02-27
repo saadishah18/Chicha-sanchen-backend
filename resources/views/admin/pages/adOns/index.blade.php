@@ -46,7 +46,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Create On Valuse</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Create AdOn Values</h5>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
@@ -271,6 +271,7 @@
                 success: function(response) {
                     alert('Data Saved');
                     $('#add_value').modal('hide'); // Show the modal
+                    window.location.reload();
                 },
                 error: function(error) {
                     // Handle error

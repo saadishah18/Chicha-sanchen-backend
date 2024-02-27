@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Cart;
 use App\Repositories\UserRepository;
 use App\Service\Facades\Api;
 
@@ -24,6 +25,17 @@ class ProfileController extends Controller
         } catch (\Exception $exception) {
             return Api::server_error($exception);
         }
+    }
+
+    public function logout(){
+        $user = auth()->user();
+//        $user->device_token = null;
+//        $user->update();
+        $cart = Cart::where('user_id', $user->id)->first();
+        if($cart)
+            $cart->delete();
+        auth()->user()->tokens()->delete();
+        return Api::response(message: trans('User logged out'));
     }
 
 }
