@@ -155,7 +155,6 @@ class OrderController extends Controller
                     'order_type' => $requestData['order_type'],
                     'order_unique_id' => generateUniqueOrderId(),
                 ]);
-
                 foreach ($cart_items as $item_index => $item) {
                     $product = Product::find($item['product_id']);
                     $category = Category::find($item['category_id']);
@@ -167,13 +166,14 @@ class OrderController extends Controller
                         'category_name' => $category->name,
                         'product_price' => $item['product_price'],
                     ]);
-
                     $order->orderItems()->save($orderItem);
 //                    dd($orderItem, $item,$item['cartProductAddOns'] );
                     foreach ($item['cartProductAddOns'] as $addOn_key => $addon) {
                         $sub_add_ons = collect();
                         if($addon->parent_add_on_id != null){
-                            $sub_add_ons = CartProductAddOns::where('cart_item_id', $item->id)->where('parent_add_on_id', $addon->parent_add_on_id)->distinct('parent_add_on_id')->get();
+                            $sub_add_ons = CartProductAddOns::where('cart_item_id', $item->id)
+                                ->where('parent_add_on_id', $addon->parent_add_on_id)
+                                ->distinct('parent_add_on_id')->get();
                         }
                         if (count($sub_add_ons)) {
                             foreach ($sub_add_ons as $sub_add_on) {
@@ -233,8 +233,31 @@ class OrderController extends Controller
                 $user = auth()->user();
                 $cart = Cart::where('user_id', $user->id)->first();
                 if($cart)
-                    $cart->delete();
-                return Api::response(new OrderApiResource($result), 'Order Created');
+//                    $cart->delete();
+                // Set up the Stripe API key
+                Stripe::setApiKey(config('services.stripe.secret'));
+//                $paymentIntent = $result->createSetupIntent(['payment_method_types' => ['card']]);
+
+                // Calculate the total amount including system fees (3%)
+//                $systemFeePercentage = 3;
+//                $systemFees = ($coffeeAmount * $systemFeePercentage) / 100;
+//                $totalAmount = $coffeeAmount + $systemFees;
+
+                // Determine the currency (assuming AED for this example)
+                $currency = 'AED';
+
+                // Create a PaymentIntent with the specified amount, currency, and payment method types
+
+                $totalAmount = $result->price;
+                $paymentIntent = PaymentIntent::create([
+                    'amount' => $totalAmount * 100, // Amount is in cents
+                    'currency' => $currency,
+                    'payment_method_types' => ['card'],
+                ]);
+
+//                return Api::response(new OrderApiResource($result), 'Order Created');
+                return Api::response(['order' => new OrderApiResource($result),'payment_intent' => $paymentIntent], 'Order Created');
+
             } else {
                 return Api::error('Cart could not be made! Contact admin');
             }
