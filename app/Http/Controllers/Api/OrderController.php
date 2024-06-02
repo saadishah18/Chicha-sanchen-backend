@@ -141,6 +141,7 @@ class OrderController extends Controller
         try {
             $requestData = $request->all();
             $get_cart_detail = Cart::find($requestData['cart_id']);
+//            dd($requestData);
             if($get_cart_detail == null){
                 return Api::error('Cart is empty');
             }
@@ -229,6 +230,7 @@ class OrderController extends Controller
                 }
                 return $order;
             });
+            $order = $result;
             if ($result != false) {
                 $user = auth()->user();
                 $cart = Cart::where('user_id', $user->id)->first();
@@ -255,11 +257,13 @@ class OrderController extends Controller
                     'payment_method_types' => ['card'],
                 ]);
 
+                $order->addPoints();
+
 //                return Api::response(new OrderApiResource($result), 'Order Created');
                 return Api::response(['order' => new OrderApiResource($result),'payment_intent' => $paymentIntent], 'Order Created');
 
             } else {
-                return Api::error('Cart could not be made! Contact admin');
+                return Api::error('Order could not be made! Contact admin');
             }
         }catch (\Exception $exception){
             dd($exception->getMessage(),$exception->getLine(),$exception->getFile(),$exception->getTrace());
@@ -329,6 +333,14 @@ class OrderController extends Controller
         }catch (\Exception $exception){
             return Api::server_error($exception);
         }
+    }
+
+    public function applyFreeDrink(Request $request, $orderId)
+    {
+        $order = Order::findOrFail($orderId);
+        $this->applyFreeDrink($order);
+
+        return response()->json($order, 200);
     }
 
 }
