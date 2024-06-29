@@ -55,5 +55,4 @@ Route::prefix('auth')->middleware('auth:sanctum',)->group(function () {
     Route::post('place-order',[\App\Http\Controllers\Api\OrderController::class,'placeOrder']);
     Route::get('order-history',[\App\Http\Controllers\Api\OrderController::class,'orderHistory']);
     Route::get('re-order/{order_id}',[\App\Http\Controllers\Api\OrderController::class,'reOrder']);
-
 });

@@ -331,6 +331,7 @@ class OrderController extends Controller
                 return Api::error('User Cart not exists');
             }
         }catch (\Exception $exception){
+            dd($exception->getMessage(),$exception->getFile(),$exception->getLine(),$orders,$exception->getTrace());
             return Api::server_error($exception);
         }
     }

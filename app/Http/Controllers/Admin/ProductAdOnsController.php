@@ -37,7 +37,7 @@ class ProductAdOnsController extends Controller
                         ->whereNotNull('parent_id');
 //                        ->distinct();
                 });
-            $query=$query->where(function ($q) use ($searchValue){
+            $query= $query->where(function ($q) use ($searchValue){
                 $q
                     ->orWhere('id', 'like', '%' .$searchValue . '%')
 //                ->orWhere('display_name', 'like', '%' .$searchValue . '%')
