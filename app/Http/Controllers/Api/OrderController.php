@@ -139,6 +139,9 @@ class OrderController extends Controller
 
     public function placeOrder(Request $request){
         try {
+            if (!Api::validate(['cart_id' => 'required'])) {
+                return Api::validation_errors();
+            }
             $requestData = $request->all();
             $get_cart_detail = Cart::find($requestData['cart_id']);
 //            dd($requestData);
