@@ -16,34 +16,18 @@ class ProductResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-//        $name = $this->name; // Example: "Osmanthus Oolong Tea, Osmanthus Oolong Tea"
-//        $categoryName = $this->category->name; // Example: "Osmanthus Oolong Tea"
-//
-//        // Check if $categoryName is a prefix of $name
-//        if (strpos($name, $categoryName) === 0) {
-//            // Remove the first occurrence of $categoryName
-//            $trimmedName = trim(substr($name, strlen($categoryName)), ', ');
-//
-//            // If trimmedName is not empty, assign it back to $name
-//            if (!empty($trimmedName)) {
-//                $name = $trimmedName;
-//            }
-//        } else {
-//            // Remove the first two words from $name
-//            $words = explode(' + ', $name, 3);
-//            if (count($words) >= 2) {
-//                $name = isset($words[2]) ? $words[2] : $words[1];
-//            }
-//        }
         $name = $this->name;
 // Split the name into words
         $words = explode(' ', $name);
-
 // Remove the first word
         array_shift($words);
 
+        if(count($words) > 1){
+            array_shift($words);
+        }
 // Join the remaining words back into a string
         $name = implode(' ', $words);
+        $name = ltrim($name, '+ ');
 
 // Update the original name
         $this->name = $name;

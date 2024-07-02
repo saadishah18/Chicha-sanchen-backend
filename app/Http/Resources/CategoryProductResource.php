@@ -14,6 +14,21 @@ class CategoryProductResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $name = $this->name;
+// Split the name into words
+        $words = explode(' ', $name);
+// Remove the first word
+        array_shift($words);
+
+        if(count($words) > 1){
+            array_shift($words);
+        }
+// Join the remaining words back into a string
+        $name = implode(' ', $words);
+        $name = ltrim($name, '+ ');
+
+// Update the original name
+        $this->name = $name;
         return [
             'id' => $this->id,
             'name' => $this->name,
