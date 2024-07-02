@@ -16,9 +16,18 @@ class ProductResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        // Find the position of '+'
+        $plusPosition = strpos($this->name, '+');
+
+// Slice the string to get the part after '+'
+        if ($plusPosition !== false) {
+            $name = trim(substr($this->name, $plusPosition + 1));
+        } else {
+            $name = $this->name; // If no '+' is found, return the original string
+        }
         $result = [
             'id' => $this->id,
-            'name' => $this->name,
+            'name' => $name,
             'description' => strip_tags($this->description),
             'category_id' => $this->category->id,
             'category' => $this->category->name,

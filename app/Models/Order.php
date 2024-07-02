@@ -27,7 +27,7 @@ class Order extends Model
 
     public function addPoints()
     {
-//        DB::transaction(function () {
+        DB::transaction(function () {
             if ($this->price >= 18) {
                 $points = floor($this->price);
                 $this->points = $points;
@@ -57,7 +57,7 @@ class Order extends Model
                     }
                 })->delay($delay);
             }
-//        });
+        });
     }
 
     public function applyFreeDrink($order)

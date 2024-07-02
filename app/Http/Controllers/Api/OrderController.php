@@ -308,7 +308,17 @@ class OrderController extends Controller
                 return $newOrder;
             });
             if ($result != false) {
-                return Api::response(new OrderApiResource($result), 'Order Created');
+                $result->addPoints();
+                Stripe::setApiKey(config('services.stripe.secret'));
+                $totalAmount = $result->price;
+                $currency = 'AED';
+                $paymentIntent = PaymentIntent::create([
+                    'amount' => $totalAmount * 100, // Amount is in cents
+                    'currency' => $currency,
+                    'payment_method_types' => ['card'],
+                ]);
+                $result->addPoints();
+                return Api::response(['order' => new OrderApiResource($result),'payment_intent' => $paymentIntent], 'Order Created');
             } else {
                 return Api::error('Cart could not be made! Contact admin');
             }
