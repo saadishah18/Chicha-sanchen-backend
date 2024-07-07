@@ -42,8 +42,8 @@
                                     <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                         Total Categories</div>
                                     <div class="h5 mb-0 font-weight-bold text-gray-800">
-{{--                                        {{ \App\Models\SidebarCategory::count() }}--}}
-                                        234
+                                        {{ \App\Models\Category::count() }}
+{{--                                        234--}}
                                     </div>
                                 </div>
                                 <div class="col-auto">
@@ -51,7 +51,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="text-center bg-gray-100 pb-0 mb-0"><a href="#">More
+                        <div class="text-center bg-gray-100 pb-0 mb-0"><a href="{{route('admin.categories.index')}}">More
                                 Info<i class="fas fa-arrow-circle-right text-gray-300 ml-2"></i> </a></div>
                     </div>
                 </div>
@@ -65,10 +65,10 @@
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
                                     <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                        Total Posts</div>
+                                        Total Products</div>
                                     <div class="h5 mb-0 font-weight-bold text-gray-800">
-{{--                                        {{ \App\Models\NewsContent::count() }}--}}
-                                        234
+                                        {{ \App\Models\Product::count() }}
+{{--                                        234--}}
                                     </div>
                                 </div>
                                 <div class="col-auto">
@@ -81,7 +81,7 @@
 {{--                                    class="fas fa-arrow-circle-right text-gray-300 ml-2"></i> </a></div>--}}
 
                         <div class="text-center bg-gray-100 pb-0 mb-0"><a
-                                href="#">More Info<i
+                                href="{{route('admin.products.index')}}">More Info<i
                                     class="fas fa-arrow-circle-right text-gray-300 ml-2"></i> </a></div>
                     </div>
                 </div>
@@ -95,20 +95,20 @@
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
                                     <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                        Total Comments</div>
+                                        Total Orders</div>
                                     <div class="h5 mb-0 font-weight-bold text-gray-800">
-{{--                                        {{ \App\Models\Comment::count() }}--}}
-                                        234
+                                        {{ \App\Models\Order::count() }}
+{{--                                        234--}}
                                     </div>
                                 </div>
                                 <div class="col-auto">
-                                    <i class="fas fa-comments fa-2x text-gray-300"></i>
+                                    <i class="fas fa-cart-arrow-down fa-2x text-gray-300"></i>
 
                                 </div>
                             </div>
                         </div>
-                        <div class="text-center bg-gray-100 pb-0 mb-0"><a href="#">More Info<i
-                                    class="fas fa-arrow-circle-right text-gray-300 ml-2"></i> </a></div>
+{{--                        <div class="text-center bg-gray-100 pb-0 mb-0"><a href="#">More Info<i--}}
+{{--                                    class="fas fa-arrow-circle-right text-gray-300 ml-2"></i> </a></div>--}}
                     </div>
                 </div>
             </div>

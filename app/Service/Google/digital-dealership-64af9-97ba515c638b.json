@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "digital-dealership-64af9",
+  "private_key_id": "97ba515c638b921f6f306af1ade3041865724620",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDdMTEUEykY9p0p\n5aUjpQVGMa4kf4o9wmEaVaSQ0ohgLTlvNQoWCu8JJE9KxvqntgxFp+7R2+HhugE9\nUOrMfCKCQUZRTffoAZrNcH5gZTyutwbcXrs5PSCH+uslioSy/uHe6b5uL3XsRFi1\nehr5StXreDo1JdQA1RTKM23uWCGfkUAPkDm2XQRI7J2MFlPMcEEH80C+vEt6CvuS\n6p6JU8lfP5OPzhMjQInUpsYg+fWHK4wc9R1uJEhS1Se9O2b+yKeCZApN/Xwdjrjh\n0pdccQu9Ep3Fi0zY3A2EGuscYTS9WnOhPvbLRdA9qY7JABdX0pKwxuwVkqH3XT6/\nEwYAnaVVAgMBAAECggEACsLWTmtR0byw9lVAn+e3xl7eyAVkcyi+LKSdNjNOUZxU\n2DI0ywNXkCxLp0NGKPUHl9DAIt/9sOVDViy8bGjFpp/VjSZFhbk+Qyxr5lvgHefn\nPFiatAHJti16iMygzbLuYWshydG8fPTxekxcfGOSdyHV3LjgaluNGi4L9RwlVp8i\nEbpG9/rKGi852NmXAA8h7qdL0DATuZFItg1Jc2OzBUb0vzTlLZGozGKXH4n76lBP\nNYFsSzOGRZftdVyDVN35T0H7HL7meXPspJpAE8HfztJ63FR/c323SIWXQriG+7D0\nLGATxxCdKOHht+QHr6YoffTXbsFLsf6+CRY4B+ulAQKBgQDwjwr2ELsYAEv8nO99\n3X2gDMUnstInK9/TmirkF4iNYl+Gnv9g+uoY+YjoWGwyMWpuMRqmoUKn0CNGRrHi\nMA0xF+CnODLXtKPhXCLDa+YR9NIuCK3NE3WL/0XOll2Ik5BQEt8JBFFusHrSpB5N\nCCdEW0TC6iua7H2rljBZUCjF4QKBgQDrY+i8tI3PwBcahVdX783jakS8C/SeaI0v\naWnbV3Zhxk+vb8rX22pztfFcP1wfa8Sn6IbZWPzfNVetdZusVBI6GVDOXCAicD1w\nCGzf81dFZIHRoLfwwe86Q/vD0zUG8FaggsK051QiWs378g/Y2oVde9g/8LtDzKkq\ny4jiN1bl9QKBgCQXwjRDNF8YhE4lmcVPuy6NW/Nl4CQicBXGltLcOQ/Fh8GiD30U\niJUws3rw8WLiiS55TZ9cqKyXDQPZTY07Wm9YPsu4IeC9aK1CbrDVepKNIg/oG3Oe\njM9xgJ7LbsM0KL3q5u3qaPFrpzH9j9JM+99Etl9sVRiMjRp2kVCFN2jhAoGAMCsi\nvjLobiHt2GR+6iTNagMeC6kapqvYcGJO4i60r+9n8QucY62nzAPoXyssC9X+ySlh\nJur53CdLSNivQYV2sWLq0T+y57k2KU3gEbf3HOEjW6Va3q6g6LhutbTrvf7Ci1gW\nxfQsmFcinbL8ITEeZ3HnX7ZAa/Bekb5SxY/zfV0CgYEAqeRQTqyj7lOYBpnUWnCC\nwqptE41sImp6E5IZ644AkAy1b+Sro5WhM6SNAlvnlrUv0WKPu1af8+W8JVVYQ5H9\nK8JD1rQuHx6XSe9leQfRyH5ftibgERBM8EVnqSJi4eIUAS4QvAxvALWghLgJTn1F\nruWMQvZd8Ob5BUsMdH2SUjI=\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-sscgq@digital-dealership-64af9.iam.gserviceaccount.com",
+  "client_id": "102843749030449955881",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-sscgq%40digital-dealership-64af9.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

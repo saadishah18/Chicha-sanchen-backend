@@ -1,6 +1,7 @@
 <?php
 
 use App\Service\Facades\Api;
+use App\Services\FcmNotificationService;
 
 include "image_upload.php";
 
@@ -127,4 +128,23 @@ function generateUniqueOrderId() {
     } while ($existingOrder);
 
     return $uniqueId;
+}
+
+
+if (! function_exists('sendFcmNotification')) {
+    function sendFcmNotification($deviceTokens, $title, $body, $data=[])
+    {
+        try {
+            $notificationService = new FcmNotificationService();
+            $notificationService->setTitle($title)->setBody($body)
+                ->to($deviceTokens)
+                ->setData($data)
+                ->send();
+//            Log::success('notification send');
+            return true;
+        } catch (\Exception $ex) {
+            Log::error('notification error:' . $ex->getMessage());
+        }
+
+    }
 }

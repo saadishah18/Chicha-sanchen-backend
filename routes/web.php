@@ -30,6 +30,9 @@ require __DIR__.'/auth.php';
 //Route::get('/', function () {
 //    return view('welcome');
 //});
+
+
+Route::get('stripe/web-hook', [\App\Http\Controllers\GuestController::class,'webHook'])->name('stripe.webhook');
 Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::group(['prefix' => 'laravel-filemanager'], function () {
         \UniSharp\LaravelFilemanager\Lfm::routes();

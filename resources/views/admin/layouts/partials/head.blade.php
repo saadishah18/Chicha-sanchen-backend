@@ -9,7 +9,7 @@
 {{--    @include('components.partials.favicon_head_link')--}}
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>VIC Admin</title>
+    <title>Chicha Sanchen Amin</title>
 
     <!-- Custom fonts for this template -->
     <link href="{{asset('admin/vendor/fontawesome-free/css/all.min.css')}}" rel="stylesheet" type="text/css">
