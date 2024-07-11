@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Events\StripeWebhookEvent;
+use App\Events\StripeWebHookEventNew;
 use App\Listeners\StripeWebHookListener;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -19,7 +19,7 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         Registered::class => [
             SendEmailVerificationNotification::class,
-        ], StripeWebhookEvent::class => [
+        ], StripeWebHookEventNew::class => [
             StripeWebHookListener::class
         ],
     ];

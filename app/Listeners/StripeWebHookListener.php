@@ -1,8 +1,7 @@
 <?php
 
 namespace App\Listeners;
-
-use App\Events\StripeWebhookEvent;
+use App\Events\StripeWebHookEventNew;
 use App\Models\Order;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
@@ -24,7 +23,7 @@ class StripeWebHookListener
      * Handle the event.
      */
 //    public function handle(object $event): void
-    public function handle(StripeWebhookEvent $event): void
+    public function handle(StripeWebHookEventNew $event): void
     {
         $stripe = new Stripe(config('stripe.secret_key'));
 
@@ -34,6 +33,7 @@ class StripeWebHookListener
 
 //        $payload = json_decode($event->getContent(), true);
         Log::info('request_datat =>'. $request_data);
+        echo 'done';
 //        Log::info('$payload =>'. $payload);
 //        $paymentIntentId = $payload['data']['object']['id'];
 //        Log::info('$paymentIntentId =>'. $paymentIntentId);
