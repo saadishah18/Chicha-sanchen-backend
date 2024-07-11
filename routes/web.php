@@ -32,7 +32,7 @@ require __DIR__.'/auth.php';
 //});
 
 
-Route::any('stripe/web-hook', [\App\Http\Controllers\GuestController::class,'webHook'])->name('stripe.webhook');
+Route::post('stripe/web-hook', [\App\Http\Controllers\GuestController::class,'webHook'])->name('stripe.webhook');
 
 Route::middleware(['auth'])->prefix('admin')->group(function () {
 //        Route::group(['prefix' => 'laravel-filemanager'], function () {
