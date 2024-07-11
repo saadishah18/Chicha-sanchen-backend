@@ -28,15 +28,13 @@ class ProductService
         $query=Product::query();
         $query=$query->where(function ($q) use ($searchValue){
             $q
-                ->orWhere('id', 'like', '%' .$searchValue . '%')
-//                ->orWhere('display_name', 'like', '%' .$searchValue . '%')
-//                ->orWhere('username', 'like', '%' .$searchValue . '%')
+//                ->orWhere('id', 'like', '%' .$searchValue . '%')
                 ->orWhere('name', 'like', '%' .$searchValue . '%')
-                ->orWhere('description', 'like', '%' .$searchValue . '%')
-                ->orWhere('price', 'like', '%' .$searchValue . '%')
-                ->orWherehas('category',function ($qu) use($searchValue){
-                    $qu->orWhere('name', 'like', '%' .$searchValue . '%');
-                });
+//                ->orWhere('description', 'like', '%' .$searchValue . '%')
+                ->orWhere('price', 'like', '%' .$searchValue . '%');
+//                ->orWherehas('category',function ($qu) use($searchValue){
+//                    $qu->orWhere('name', 'like', '%' .$searchValue . '%');
+//                });
         });
         // Total records
         $totalRecordsWithFilter=clone $query;
