@@ -144,6 +144,7 @@ class OrderController extends Controller
             }
             $requestData = $request->all();
             $get_cart_detail = Cart::find($requestData['cart_id']);
+//            dd($requestData);
             if($get_cart_detail == null){
                 return Api::error('Cart is empty');
             }
@@ -257,13 +258,6 @@ class OrderController extends Controller
                     'amount' => $totalAmount * 100, // Amount is in cents
                     'currency' => $currency,
                     'payment_method_types' => ['card'],
-                    'metadata' => [
-                        'order_id' => $order->id,
-                        'user_id' => auth()->id(),
-                        'cart_id' => $request->cart_id,
-                        'customer_email' => auth()->user()->email,
-//                    'phone_no' => $phoneNo
-                    ]
                 ]);
 
                 $order->addPoints();
