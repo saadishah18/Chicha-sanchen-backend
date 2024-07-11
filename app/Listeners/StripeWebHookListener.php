@@ -1,11 +1,13 @@
 <?php
 
 namespace App\Listeners;
+
 use App\Events\StripeWebHookEventNew;
 use App\Models\Order;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Log;
+use Pusher\Pusher;
 use Stripe\PaymentIntent;
 use Stripe\Stripe;
 
@@ -30,39 +32,32 @@ class StripeWebHookListener
         // Validate webhook signature (omitted for brevity)
 
         $request_data = $event->request_data;
+        $metadata = $request_data['data']['object']['metadata'];
 
-//        $payload = json_decode($event->getContent(), true);
-        Log::info(['request_datat' => $request_data]);
-        echo 'done';
-//        Log::info('$payload =>'. $payload);
-//        $paymentIntentId = $payload['data']['object']['id'];
-//        Log::info('$paymentIntentId =>'. $paymentIntentId);
+        $check_status = $request_data['data']['object']['captured'];
+        if ($check_status == true) {
+            $order_id = $metadata['order_id'];
+            $order = Order::find($order_id);
+            $order->payment_status = 'Paid';
+            $order->payment_object = json_encode($request_data);
+            $order->transaction_id = $request_data['data']['object']['id'];
+            $order->update();
+            $order->addPoints();
+        }
+    }
 
-//        try {
-//            $paymentIntent = PaymentIntent::retrieve($paymentIntentId, []);
-//            Log::info('paymentIntent => ' . $paymentIntent);
-//            // Process the payment based on its status:
-//            switch ($paymentIntent->status) {
-//                case 'succeeded':
-//                    $order = Order::find($paymentIntent->order_id);
-//                    Log::info($order);
-//                // Card charged successfully, process order fulfillment
-////                return response()->json(['message' => 'Payment successful!']);
-//                case 'payment_failed':
-//                    // Card declined or other error, handle accordingly
-////                return response()->json(['message' => 'Payment failed: ' . $paymentIntent->last_payment_error->message], 400);
-//                default:
-//                    // Handle other payment statuses (e.g., pending, canceled)
-////                return response()->json(['message' => 'Payment status: ' . $paymentIntent->status]);
-//            }
-//        } catch (\Exception $e) {
-//            // Handle potential errors (e.g., invalid payment intent ID)
-//            Log::error($e->getMessage());
-//            Log::error($e->getFile());
-//            Log::error($e->getLine());
-//            Log::error($e->getTrace());
-//        }
-
-
+    private function sendPusherEvent($userId)
+    {
+        $options = [
+            'cluster' => config('broadcasting.connections.pusher.options.cluster'),
+            'useTLS' => true,
+        ];
+        $pusher = new Pusher(
+            config('broadcasting.connections.pusher.key'),
+            config('broadcasting.connections.pusher.secret'),
+            config('broadcasting.connections.pusher.app_id'),
+            $options
+        );
+        $pusher->trigger('user-' . $userId, 'payment-intent-expired', ['message' => 'A new order has been made. Refresh order table']);
     }
 }

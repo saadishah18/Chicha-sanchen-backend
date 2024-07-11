@@ -11,4 +11,13 @@ class AdminDashboardController extends Controller
     {
         return view('admin.dashboard');
     }
+
+    public function edit(){
+
+    }
+
+    public function resetPassword(){
+
+    }
 }
+

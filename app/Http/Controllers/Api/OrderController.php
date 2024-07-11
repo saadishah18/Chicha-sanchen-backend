@@ -240,7 +240,6 @@ class OrderController extends Controller
                 if($cart)
                     $cart->delete();
                 // Set up the Stripe API key
-                Stripe::setApiKey(config('services.stripe.secret'));
 //                $paymentIntent = $result->createSetupIntent(['payment_method_types' => ['card']]);
 
                 // Calculate the total amount including system fees (3%)
@@ -248,19 +247,11 @@ class OrderController extends Controller
 //                $systemFees = ($coffeeAmount * $systemFeePercentage) / 100;
 //                $totalAmount = $coffeeAmount + $systemFees;
 
-                // Determine the currency (assuming AED for this example)
-                $currency = 'AED';
 
                 // Create a PaymentIntent with the specified amount, currency, and payment method types
+                $paymentIntent = $this->makeLink($order);
 
-                $totalAmount = $result->price;
-                $paymentIntent = PaymentIntent::create([
-                    'amount' => $totalAmount * 100, // Amount is in cents
-                    'currency' => $currency,
-                    'payment_method_types' => ['card'],
-                ]);
-
-                $order->addPoints();
+//                $order->addPoints();
 
 //                return Api::response(new OrderApiResource($result), 'Order Created');
                 return Api::response(['order' => new OrderApiResource($result),'payment_intent' => $paymentIntent], 'Order Created');
@@ -355,6 +346,33 @@ class OrderController extends Controller
         $this->applyFreeDrink($order);
 
         return response()->json($order, 200);
+    }
+
+    public function makeLink($order)
+    {
+        #$stripe = Stripe::make('sk_test_51MRYMMIeKsa2Rfj0xUuh26QRBvowKwwPqMBqoxqR8iLfAXcw1HPPxTCguMmxBeF4UPDvy24P5MhYZbwnThG726Fk00AcLN4r0s');
+        Stripe::setApiKey(config('services.stripe.secret'));
+        $currency = 'AED';
+        $totalAmount = $order->price;
+        $paymentIntent = PaymentIntent::create([
+            'amount' => $totalAmount * 100, // Amount is in cents
+            'currency' => $currency,
+            'payment_method_types' => ['card'],
+            'metadata' => [
+                'user_id' => auth()->id(),
+                'order_id' => $order->id,
+                'quantity' => $order->orderItems->count(),
+                'date_time' => now() . ' ' . now()->format('M d, Y h:i A'),
+                'created_at' => now()->toIso8601String(), // Record creation time
+                'amount_with_all_services' => $totalAmount,
+                'currency' => strtoupper('AED'),
+                'type' => 'Buy Cofee/ Tea',
+                'webhook_type' => 'checkout_webhook',
+                'customer_email' => auth()->user()->email,
+            ]
+        ]);
+
+        return $paymentIntent;
     }
 
 }

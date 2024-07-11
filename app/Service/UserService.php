@@ -23,6 +23,7 @@ class UserService
         $columnSortOrder = $order_arr[0]['dir']; // asc or desc
         $searchValue = $search_arr['value']; // Search value
         $query=User::query();
+        $query=$query->where('id','>','1');
         $query=$query->where(function ($q) use ($searchValue){
             $q
                 ->orWhere('id', 'like', '%' .$searchValue . '%')
