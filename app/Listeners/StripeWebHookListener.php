@@ -32,7 +32,7 @@ class StripeWebHookListener
         $request_data = $event->request_data;
 
 //        $payload = json_decode($event->getContent(), true);
-        Log::info('request_datat =>'. $request_data);
+        Log::info(['request_datat' => $request_data]);
         echo 'done';
 //        Log::info('$payload =>'. $payload);
 //        $paymentIntentId = $payload['data']['object']['id'];
