@@ -144,7 +144,6 @@ class OrderController extends Controller
             }
             $requestData = $request->all();
             $get_cart_detail = Cart::find($requestData['cart_id']);
-//            dd($requestData);
             if($get_cart_detail == null){
                 return Api::error('Cart is empty');
             }
@@ -235,10 +234,10 @@ class OrderController extends Controller
             });
             $order = $result;
             if ($result != false) {
-//                $user = auth()->user();
-//                $cart = Cart::where('user_id', $user->id)->first();
-//                if($cart)
-//                    $cart->delete();
+                $user = auth()->user();
+                $cart = Cart::where('user_id', $user->id)->first();
+                if($cart)
+                    $cart->delete();
                 // Set up the Stripe API key
                 Stripe::setApiKey(config('services.stripe.secret'));
 //                $paymentIntent = $result->createSetupIntent(['payment_method_types' => ['card']]);
