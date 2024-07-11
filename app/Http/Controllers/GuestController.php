@@ -10,7 +10,7 @@ class GuestController extends Controller
     public function webHook(Request $request)
     {
         $complete_object = $request->all();
-        dd($request->all());
+//        dd($request->all());
 //        dispatch(new StripeWebhookEvent($complete_object));
 //        event(new StripeWebhookEvent($complete_object));
         StripeWebHookEventNew::dispatch($complete_object);
