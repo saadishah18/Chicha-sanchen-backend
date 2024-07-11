@@ -260,14 +260,14 @@ class OrderController extends Controller
                     'metadata' => [
                         'user_id' => auth()->id(),
                         'order_id' => $order->id,
-                        'quantity' => $order->orderItems->count(),
-                        'date_time' => now() . ' ' . now()->format('M d, Y h:i A'),
-                        'created_at' => now()->toIso8601String(), // Record creation time
-                        'amount_with_all_services' => $totalAmount,
-                        'currency' => strtoupper('AED'),
-                        'type' => 'Buy Cofee/ Tea',
-                        'webhook_type' => 'checkout_webhook',
-                        'customer_email' => auth()->user()->email,
+//                        'quantity' => $order->orderItems->count(),
+//                        'date_time' => now() . ' ' . now()->format('M d, Y h:i A'),
+//                        'created_at' => now()->toIso8601String(), // Record creation time
+//                        'amount_with_all_services' => $totalAmount,
+//                        'currency' => strtoupper('AED'),
+//                        'type' => 'Buy Cofee/ Tea',
+//                        'webhook_type' => 'checkout_webhook',
+//                        'customer_email' => auth()->user()->email,
                     ]
                 ]);
 
