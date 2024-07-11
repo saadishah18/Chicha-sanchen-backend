@@ -43,10 +43,11 @@ class StripeWebHookListener
             $order->transaction_id = $request_data['data']['object']['id'];
             $order->update();
             $order->addPoints();
+            $this->sendPusherEvent(1);
         }
     }
 
-    private function sendPusherEvent($userId)
+    private function sendPusherEvent($receiver_id)
     {
         $options = [
             'cluster' => config('broadcasting.connections.pusher.options.cluster'),
@@ -58,6 +59,6 @@ class StripeWebHookListener
             config('broadcasting.connections.pusher.app_id'),
             $options
         );
-        $pusher->trigger('user-' . $userId, 'payment-intent-expired', ['message' => 'A new order has been made. Refresh order table']);
+        $pusher->trigger('order-updates-' . $receiver_id, 'order-completed', ['message' => 'A new order has been made. Refresh order table']);
     }
 }
