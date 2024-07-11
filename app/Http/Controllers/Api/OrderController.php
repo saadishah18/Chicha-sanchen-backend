@@ -256,19 +256,7 @@ class OrderController extends Controller
                 $paymentIntent = PaymentIntent::create([
                     'amount' => $totalAmount * 100, // Amount is in cents
                     'currency' => $currency,
-                    'payment_method_types' => ['card'],
-                    'metadata' => [
-                        'user_id' => auth()->id(),
-                        'order_id' => $order->id,
-//                        'quantity' => $order->orderItems->count(),
-//                        'date_time' => now() . ' ' . now()->format('M d, Y h:i A'),
-//                        'created_at' => now()->toIso8601String(), // Record creation time
-//                        'amount_with_all_services' => $totalAmount,
-//                        'currency' => strtoupper('AED'),
-//                        'type' => 'Buy Cofee/ Tea',
-//                        'webhook_type' => 'checkout_webhook',
-//                        'customer_email' => auth()->user()->email,
-                    ]
+                    'payment_method_types' => ['card']
                 ]);
 
 //                $order->addPoints();
