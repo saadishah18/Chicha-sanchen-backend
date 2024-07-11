@@ -47,7 +47,6 @@ Route::post('search-product',[ProductController::class,'searchProduct']);
 Route::prefix('auth')->middleware('auth:sanctum',)->group(function () {
 //    return $request->user();
     Route::post('logout', [ProfileController::class, 'logout']);
-
     Route::post('add-to-cart/{id?}',[\App\Http\Controllers\Api\CartController::class,'addToCart']);
     Route::get('cart-detail',[\App\Http\Controllers\Api\CartController::class,'cartDetail']);
     Route::get('remove-item/{item_id}',[\App\Http\Controllers\Api\CartController::class,'removeCartItem']);
@@ -55,4 +54,5 @@ Route::prefix('auth')->middleware('auth:sanctum',)->group(function () {
     Route::post('place-order',[\App\Http\Controllers\Api\OrderController::class,'placeOrder']);
     Route::get('order-history',[\App\Http\Controllers\Api\OrderController::class,'orderHistory']);
     Route::get('re-order/{order_id}',[\App\Http\Controllers\Api\OrderController::class,'reOrder']);
+    Route::get('/rewards/detail',[\App\Http\Controllers\Api\ProfileController::class,'userRewardsDetail']);
 });

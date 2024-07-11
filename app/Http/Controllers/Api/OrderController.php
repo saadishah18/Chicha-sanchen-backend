@@ -235,10 +235,10 @@ class OrderController extends Controller
             });
             $order = $result;
             if ($result != false) {
-                $user = auth()->user();
-                $cart = Cart::where('user_id', $user->id)->first();
-                if($cart)
-                    $cart->delete();
+//                $user = auth()->user();
+//                $cart = Cart::where('user_id', $user->id)->first();
+//                if($cart)
+//                    $cart->delete();
                 // Set up the Stripe API key
                 Stripe::setApiKey(config('services.stripe.secret'));
 //                $paymentIntent = $result->createSetupIntent(['payment_method_types' => ['card']]);
@@ -258,6 +258,13 @@ class OrderController extends Controller
                     'amount' => $totalAmount * 100, // Amount is in cents
                     'currency' => $currency,
                     'payment_method_types' => ['card'],
+                    'metadata' => [
+                        'order_id' => $order->id,
+                        'user_id' => auth()->id(),
+                        'cart_id' => $request->cart_id,
+                        'customer_email' => auth()->user()->email,
+//                    'phone_no' => $phoneNo
+                    ]
                 ]);
 
                 $order->addPoints();
