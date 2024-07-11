@@ -25,11 +25,28 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
-        $request->authenticate();
+//        $request->authenticate();
+//
+//        $request->session()->regenerate();
+//
+//        return redirect()->intended(RouteServiceProvider::HOME);
+        $user = Auth::attempt($request->only('email', 'password'), $request->boolean('remember'));
+//        dd($user);
+        if ($user && Auth::user()->role !== 'admin') {
+            Auth::logout();
+            return redirect()->to('/login')->withErrors([
+                'email' => 'Unauthorized access. Only admins can log in.',
+            ]);
+        }
 
-        $request->session()->regenerate();
+        if ($user) {
+            $request->session()->regenerate();
+            return redirect()->intended(RouteServiceProvider::HOME);
+        }
 
-        return redirect()->intended(RouteServiceProvider::HOME);
+        return back()->withErrors([
+            'email' => 'The provided credentials do not match our records.',
+        ]);
     }
 
     /**
