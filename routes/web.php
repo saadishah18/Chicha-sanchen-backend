@@ -32,7 +32,7 @@ require __DIR__.'/auth.php';
 //});
 
 
-Route::post('stripe/web-hook', [\App\Http\Controllers\GuestController::class,'webHook']);
+Route::post('stripe/web-hook', [\App\Http\Controllers\GuestController::class,'webHook'])->withoutMiddleware(\App\Http\Middleware\VerifyCsrfToken::class);;
 
 Route::middleware(['auth'])->prefix('admin')->group(function () {
 //        Route::group(['prefix' => 'laravel-filemanager'], function () {
