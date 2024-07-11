@@ -36,8 +36,8 @@ Route::get('stripe/web-hook', [\App\Http\Controllers\GuestController::class,'web
 
 Route::middleware(['auth'])->prefix('admin')->group(function () {
 //        Route::group(['prefix' => 'laravel-filemanager'], function () {
-        \UniSharp\LaravelFilemanager\Lfm::routes();
-    });
+//        \UniSharp\LaravelFilemanager\Lfm::routes();
+//    });
 //Route::prefix('admin')->group(function () {
     Route::get('/dashboard', [\App\Http\Controllers\Admin\AdminDashboardController::class, 'dashboard'])->name('admin.dashboard');
 //    Route::get('/dashboard', [\App\Http\Controllers\Admin\AdminDashboardController::class, 'dashboard'])->name('admin.dashboard');
