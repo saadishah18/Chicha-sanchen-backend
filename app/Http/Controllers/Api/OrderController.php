@@ -249,15 +249,15 @@ class OrderController extends Controller
 
 
                 // Create a PaymentIntent with the specified amount, currency, and payment method types
-//                $paymentIntent = $this->makeLink($order);
-                Stripe::setApiKey(config('services.stripe.secret'));
-                $currency = 'AED';
-                $totalAmount = $order->price;
-                $paymentIntent = PaymentIntent::create([
-                    'amount' => $totalAmount * 100, // Amount is in cents
-                    'currency' => $currency,
-                    'payment_method_types' => ['card']
-                ]);
+                $paymentIntent = $this->makeLink($order);
+//                Stripe::setApiKey(config('services.stripe.secret'));
+//                $currency = 'AED';
+//                $totalAmount = $order->price;
+//                $paymentIntent = PaymentIntent::create([
+//                    'amount' => $totalAmount * 100, // Amount is in cents
+//                    'currency' => $currency,
+//                    'payment_method_types' => ['card']
+//                ]);
 
 //                $order->addPoints();
 
@@ -316,7 +316,8 @@ class OrderController extends Controller
                     'currency' => $currency,
                     'payment_method_types' => ['card'],
                 ]);
-                $result->addPoints();
+//                $result->addPoints();
+//                $paymentIntent = $this->makeLink($order);
                 return Api::response(['order' => new OrderApiResource($result),'payment_intent' => $paymentIntent], 'Order Created');
             } else {
                 return Api::error('Cart could not be made! Contact admin');
