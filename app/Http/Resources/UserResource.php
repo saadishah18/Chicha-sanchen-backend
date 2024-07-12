@@ -19,7 +19,7 @@ class UserResource extends JsonResource
             'formatted_dob' => Carbon::parse($this->dob)->toFormattedDateString(),
             'email_verified_at' => $this->email_verified_at,
             'created_at' => $this->created_at,
-//            "actions" => $actions
+            "actions" => $actions
         ];
     }
 }

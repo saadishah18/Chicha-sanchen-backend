@@ -91,11 +91,11 @@
             });
 
 
-            $(document).on('click', '.delete_user_from_list', function(e) {
-                let userId = $(e.currentTarget).data('id');
-                url = '/admin/users/' + userId;
+            $(document).on('click', '.delete_product_from_list', function(e) {
+                let productID = $(e.currentTarget).data('id');
+                url = '/admin/products/' + productID;
                 Swal.fire({
-                    title: 'Are you sure?',
+                    title: 'Are you sure to delete?',
                     text: 'You cannot reverse this action',
                     showCancelButton: true,
                     confirmButtonText: 'Yes, delete it!',
@@ -111,7 +111,7 @@
                             data: {
                                 "_method": 'DELETE',
                                 "_token": "{{ csrf_token() }}",
-                                'user_id': userId
+                                'id': productID
                             },
                             success: function(data) {
                                 if (data.status) {
@@ -131,9 +131,10 @@
                 })
 
             });
+
             $(document).on('click', '.toggle_approve', function(e) {
-                let userId = $(e.currentTarget).data('id');
-                url = '/admin/users/' + userId + '/toggle-approve';
+                let productID = $(e.currentTarget).data('id');
+                url = '/admin/products/' + productID + '/toggle-approve';
                 Swal.fire({
                     title: 'Are you sure?',
                     text: 'You can reverse this action anytime',
@@ -150,7 +151,48 @@
                             method: 'POST',
                             data: {
                                 "_token": "{{ csrf_token() }}",
-                                'user_id': userId
+                                'id': productID
+                            },
+                            success: function(data) {
+                                if (data.status) {
+                                    datatable.ajax.reload(null, false);
+                                }
+                            },
+                            error: function(data) {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: '',
+                                    text: data?.responseJSON?.message,
+                                })
+                            }
+                        });
+                    }
+
+                })
+
+            });
+
+            $(document).on('click', '.deactivate-product', function(e) {
+                let productID = $(e.currentTarget).data('id');
+                let status = $(e.currentTarget).data('status');
+                url = '/admin/products/' + productID + '/deactivate-product';
+                Swal.fire({
+                    title: 'Are you sure to '+status+'?',
+                    text: 'You can reverse this action anytime',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, do it!',
+                    cancelButtonText: 'No, cancel!',
+                    reverseButtons: true,
+                    cancelButtonColor: 'grey',
+                    confirmButtonColor: 'red',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url,
+                            method: 'POST',
+                            data: {
+                                "_token": "{{ csrf_token() }}",
+                                'id': productID
                             },
                             success: function(data) {
                                 if (data.status) {

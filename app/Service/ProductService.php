@@ -140,4 +140,37 @@ class ProductService
             return true;
         }
     }
+
+    public function featureProduct($id){
+        $product = Product::find($id);
+        if($product){
+            $product->is_featured = $product->is_featured == 1 ? 0 : 1;
+//            dd($product);
+            $product->update();
+            return true;
+        }else{
+            throw new \Exception('Product does not exist');
+        }
+    }
+
+    public function deactivateProduct($id){
+        $product = Product::find($id);
+        if($product){
+            $product->is_active = $product->is_active == 1 ? 0 : 1;
+            $product->update();
+            return true;
+        }else{
+            throw new \Exception('Product does not exist');
+        }
+    }
+
+    public function delete($id)
+    {
+        $user = Product::find($id);
+        if ($user){
+            return $user->delete();
+        }
+
+        throw new \Exception('Product does not exist');
+    }
 }

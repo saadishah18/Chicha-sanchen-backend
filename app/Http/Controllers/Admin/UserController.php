@@ -26,4 +26,24 @@ class UserController extends Controller
             dd($exception->getMessage());
         }
     }
+
+    public function toggleApprove($id)
+    {
+        try {
+            $this->service->toggleApprove($id);
+            return $this->returnSuccessResponseArray(['status' => true]);
+        }catch (\Exception $e){
+            return $this->returnFailedResponseArray(['status' => false,'message' => $this->errorDetails($e)]);
+        }
+    }
+
+    public function destroy($id)
+    {
+        try {
+            $this->service->delete($id);
+            return $this->returnSuccessResponseArray(['status' => true]);
+        }catch (\Exception $e){
+            return $this->returnFailedResponseArray(['status' => false,'message' => $this->errorDetails($e)]);
+        }
+    }
 }

@@ -57,4 +57,24 @@ class UserService
 
         return response()->json($response);
     }
+
+    public function toggleApprove($id)
+    {
+        $user = User::find($id);
+        if ($user){
+            return $user->update(['is_active' => !$user->is_active]);
+        }
+
+        throw new \Exception('this user does not exist');
+    }
+
+    public function delete($id)
+    {
+        $user = User::find($id);
+        if ($user){
+            return $user->delete();
+        }
+
+        throw new \Exception('this user does not exist');
+    }
 }

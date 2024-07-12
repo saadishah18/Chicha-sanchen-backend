@@ -77,4 +77,32 @@ class ProductController extends Controller
 //        dd($product_assigned_addons);
         return view('admin.pages.products.assign-add-ons',compact('product','add_ons','product_assigned_addons'));
     }
+
+    public function featureProduct($id){
+        try {
+            $this->service->featureProduct($id);
+            return $this->returnSuccessResponseArray(['status' => true]);
+        }catch (\Exception $e){
+            return $this->returnFailedResponseArray(['status' => false,'message' => $this->errorDetails($e)]);
+        }
+    }
+
+    public function deactivateProduct($id){
+        try {
+            $this->service->deactivateProduct($id);
+            return $this->returnSuccessResponseArray(['status' => true]);
+        }catch (\Exception $e){
+            return $this->returnFailedResponseArray(['status' => false,'message' => $this->errorDetails($e)]);
+        }
+    }
+
+    public function destroy($id)
+    {
+        try {
+            $this->service->delete($id);
+            return $this->returnSuccessResponseArray(['status' => true]);
+        }catch (\Exception $e){
+            return $this->returnFailedResponseArray(['status' => false,'message' => $this->errorDetails($e)]);
+        }
+    }
 }

@@ -47,11 +47,11 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::prefix('users')->group(function () {
         Route::get('/', [\App\Http\Controllers\Admin\UserController::class, 'index'])->name('admin.users.index');
         Route::get('/datatable', [\App\Http\Controllers\Admin\UserController::class, 'datatable'])->name('admin.users.datatable');
-        Route::post('/', [\App\Http\Controllers\Admin\AdminUsersController::class, 'store'])->name('admin.users.store');
-        Route::get('/{id}/edit', [\App\Http\Controllers\Admin\AdminUsersController::class, 'edit'])->name('admin.users.edit');
+        Route::post('/', [\App\Http\Controllers\Admin\UserController::class, 'store'])->name('admin.users.store');
+//        Route::get('/{id}/edit', [\App\Http\Controllers\Admin\UserController::class, 'edit'])->name('admin.users.edit');
 //        Route::get('/create', [\App\Http\Controllers\Admin\AdminUsersController::class, 'create'])->name('admin.users.create');
-//        Route::delete('/{id}', [\App\Http\Controllers\Admin\AdminUsersController::class, 'destroy'])->name('admin.users.destroy');
-//        Route::post('/{id}/toggle-approve', [\App\Http\Controllers\Admin\AdminUsersController::class, 'toggleApprove'])->name('admin.users.toggle_approve');
+        Route::delete('/{id}', [\App\Http\Controllers\Admin\UserController::class, 'destroy'])->name('admin.users.destroy');
+        Route::post('/{id}/toggle-approve', [\App\Http\Controllers\Admin\UserController::class, 'toggleApprove'])->name('admin.users.toggle_approve');
 //        Route::patch('/{id}/update', [\App\Http\Controllers\Admin\AdminUsersController::class, 'update'])->name('admin.users.update');
     });
     Route::prefix('categories')->group(function () {
@@ -72,6 +72,10 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
         Route::get('/{id}/edit', [\App\Http\Controllers\Admin\ProductController::class, 'edit'])->name('admin.products.edit');
         Route::post('/update', [\App\Http\Controllers\Admin\ProductController::class, 'update'])->name('admin.products.update');
         Route::get('/products/{id}/assign-add-ons', [\App\Http\Controllers\Admin\ProductController::class, 'assingAdOnToProductPage'])->name('admin.products.assign-add-on');
+        Route::post('/{id}/toggle-approve', [\App\Http\Controllers\Admin\ProductController::class, 'featureProduct'])->name('admin.users.toggle_approve');
+        Route::post('/{id}/deactivate-product', [\App\Http\Controllers\Admin\ProductController::class, 'deactivateProduct'])->name('admin.users.toggle_approve');
+        Route::delete('/{id}', [\App\Http\Controllers\Admin\ProductController::class, 'destroy'])->name('admin.users.destroy');
+
     });
 
     Route::prefix('addons')->group(function () {
