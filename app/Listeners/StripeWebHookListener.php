@@ -34,7 +34,7 @@ class StripeWebHookListener
         // Validate webhook signature (omitted for brevity)
 
         $request_data = $event->request_data;
-        Log::info(['req_data' => $request_data]);
+        Log::info(['req_data' => $request_data['data']['object']['id']]);
         $metadata = $request_data['data']['object']['metadata'];
 
         $check_status = $request_data['data']['object']['captured'];
@@ -47,8 +47,8 @@ class StripeWebHookListener
             $order->update();
             $order->addPoints();
             $this->sendPusherEvent(1);
-            $user = auth()->user();
-            $cart = Cart::where('user_id', $user->id)->first();
+//            $user = auth()->user();
+            $cart = Cart::where('user_id', $metadata['user_id'])->first();
             if($cart)
                 $cart->delete();
         }
