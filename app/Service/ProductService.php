@@ -64,7 +64,6 @@ class ProductService
     {
         $data = $request->all();
         $data['is_featured'] = $request->is_featured == 'Yes' ? 1 : 0;
-//        $data['image'] = $data['attachment'];
         if ($request->has('image')) {
 
             $image_validation = $this->image_validation($request->file('image'));

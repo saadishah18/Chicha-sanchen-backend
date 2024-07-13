@@ -56,9 +56,7 @@ class ProductAdOnsController extends Controller
                 ->take($rowperpage)
                 ->get();
 
-
             $data_arr = AdOnResource::collection($records)->toArray($request);
-//        dd($data_arr);
             $response = array(
                 "draw" => intval($draw),
                 "iTotalRecords" =>$totalRecordsWithFilter,
@@ -74,7 +72,11 @@ class ProductAdOnsController extends Controller
     }
 
     public function store(Request $request){
+        try {
 
+        }catch (\Exception $exception){
+            dd($exception->getMessage());
+        }
     }
 
     public function create(){
@@ -82,7 +84,8 @@ class ProductAdOnsController extends Controller
     }
 
     public function edit($id){
-
+        $adOn = AddOn::find($id);
+        dd($adOn);
     }
 
     public function update(Request $request){

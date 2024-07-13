@@ -8,6 +8,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Log;
 use Pusher\Pusher;
+use Pusher\PusherException;
 use Stripe\PaymentIntent;
 use Stripe\Stripe;
 
@@ -49,16 +50,34 @@ class StripeWebHookListener
 
     private function sendPusherEvent($receiver_id)
     {
-        $options = [
-            'cluster' => config('broadcasting.connections.pusher.options.cluster'),
-            'useTLS' => true,
-        ];
-        $pusher = new Pusher(
-            config('broadcasting.connections.pusher.key'),
-            config('broadcasting.connections.pusher.secret'),
-            config('broadcasting.connections.pusher.app_id'),
-            $options
-        );
-        $pusher->trigger('order-updates-' . $receiver_id, 'order-completed', ['message' => 'A new order has been made. Refresh order table']);
+        try {
+            $options = [
+                'cluster' => config('broadcasting.connections.pusher.options.cluster'),
+                'useTLS' => true,
+            ];
+            $pusher = new Pusher(
+                config('broadcasting.connections.pusher.key'),
+                config('broadcasting.connections.pusher.secret'),
+                config('broadcasting.connections.pusher.app_id'),
+                $options
+            );
+
+            $channel = 'order-updates-' . $receiver_id;
+            $event = 'order-completed';
+            $data = ['message' => 'A new order has been made. Refresh order table'];
+
+            \Log::info('Sending Pusher event', [
+                'channel' => $channel,
+                'event' => $event,
+                'data' => $data,
+            ]);
+
+            $pusher->trigger($channel, $event, $data);
+
+        } catch (PusherException $e) {
+            Log::error('Pusher error', ['exception' => $e]);
+        } catch (\Exception $e) {
+            Log::error('General error', ['exception' => $e]);
+        }
     }
 }
