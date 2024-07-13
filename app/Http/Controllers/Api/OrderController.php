@@ -235,10 +235,7 @@ class OrderController extends Controller
             });
             $order = $result;
             if ($result != false) {
-                $user = auth()->user();
-                $cart = Cart::where('user_id', $user->id)->first();
-                if($cart)
-                    $cart->delete();
+
                 // Set up the Stripe API key
 //                $paymentIntent = $result->createSetupIntent(['payment_method_types' => ['card']]);
 

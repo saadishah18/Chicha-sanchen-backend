@@ -3,6 +3,7 @@
 namespace App\Listeners;
 
 use App\Events\StripeWebHookEventNew;
+use App\Models\Cart;
 use App\Models\Order;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
@@ -45,6 +46,10 @@ class StripeWebHookListener
             $order->update();
             $order->addPoints();
             $this->sendPusherEvent(1);
+            $user = auth()->user();
+            $cart = Cart::where('user_id', $user->id)->first();
+            if($cart)
+                $cart->delete();
         }
     }
 
