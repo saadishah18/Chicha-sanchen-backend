@@ -34,6 +34,7 @@ class StripeWebHookListener
         // Validate webhook signature (omitted for brevity)
 
         $request_data = $event->request_data;
+        Log::info(['req_data' => $request_data]);
         $metadata = $request_data['data']['object']['metadata'];
 
         $check_status = $request_data['data']['object']['captured'];
