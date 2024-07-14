@@ -35,7 +35,8 @@ class CategoryProductResource extends JsonResource
             'category' => $this->category->name,
             'image' => $this->image != null ? imagePath($this->image) : null,
             'is_featured' => $this->is_featured,
-            'in_stock' => $this->in_stock
+            'in_stock' => $this->in_stock,
+            'price' => $this->price
         ];
     }
 }
