@@ -95,7 +95,7 @@
     var channel = pusher.subscribe('order-updates-'+userID);
     channel.bind('order-completed', function(data) {
         // alert(JSON.stringify(data));
-        toastr.success(data, 'New Order');
+        toastr.success(JSON.stringify(data), 'New Order');
         {{--toastr.success("{{ Session::get('message') }}");--}}
     });
 </script>
