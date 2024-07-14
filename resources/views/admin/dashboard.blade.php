@@ -121,19 +121,4 @@
 
     </div>
 @endsection
-<script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
-<script>
 
-    // Enable pusher logging - don't include this in production
-    Pusher.logToConsole = true;
-
-    var pusher = new Pusher('febd34ec5f890afb6f21', {
-        cluster: 'ap2',
-        authEndpoint: '/pusher/auth', // The authentication endpoint you defined
-    });
-    let userID = '{{auth()->id()}}'
-    var channel = pusher.subscribe('order-updates-'+userID);
-    channel.bind('order-completed', function(data) {
-        alert(JSON.stringify(data));
-    });
-</script>

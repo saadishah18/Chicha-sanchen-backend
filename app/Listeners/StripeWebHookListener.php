@@ -47,12 +47,7 @@ class StripeWebHookListener
             $order->update();
             $order->addPoints();
             $this->sendPusherEvent(1);
-            $cart = Cart::where('user_id', $metadata['user_id'])->first();
-            Log::info(['cart' => $cart]);
-            if($cart){
-                $cart->delete();
-            }
-
+            Cart::where('user_id', $metadata['user_id'])->delete();
         }
     }
 
