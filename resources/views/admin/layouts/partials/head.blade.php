@@ -23,7 +23,7 @@
 
     <!-- Custom styles for this page -->
     <link href="{{asset('admin/vendor/datatables/dataTables.bootstrap4.min.css')}}" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr/latest/toastr.min.css" integrity="sha512-vXrUX0IkQhcIhKjPkWvbtkW4p/DjbJSTHKm5vBRpB9vZwlAvhXTjtLMQq+a2cqNmNeiQykdE0vHpBRXcYziewQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" rel="stylesheet">
 
     @yield('css')
 </head>

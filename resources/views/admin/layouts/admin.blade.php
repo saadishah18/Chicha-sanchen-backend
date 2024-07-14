@@ -66,8 +66,23 @@
 </div>
 @include('admin.layouts.partials.js')
 @yield('js')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+<script>
+    toastr.options = {
+        "closeButton": true,
+        "debug": false,
+        "newestOnTop": false,
+        "progressBar": false,
+        "positionClass": "toast-top-right",
+        "timeOut": "5000",
+        "onclick": null,
+        "extendedTimeOut": "1000",
+        "tapToDismiss": false
+    };
+</script>
 <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
 <script>
+    // toastr.success('adfs', 'New Order');
 
     // Enable pusher logging - don't include this in production
     Pusher.logToConsole = true;
@@ -79,9 +94,9 @@
     let userID = '{{auth()->id()}}'
     var channel = pusher.subscribe('order-updates-'+userID);
     channel.bind('order-completed', function(data) {
-        alert(JSON.stringify(data));
-        toastr[](data, 'New Order');
-
+        // alert(JSON.stringify(data));
+        toastr.success(data, 'New Order');
+        {{--toastr.success("{{ Session::get('message') }}");--}}
     });
 </script>
 </body>
