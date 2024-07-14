@@ -4,6 +4,9 @@ namespace App\Listeners;
 
 use App\Events\StripeWebHookEventNew;
 use App\Models\Cart;
+use App\Models\CartAddOnValue;
+use App\Models\CartItem;
+use App\Models\CartProductAddOns;
 use App\Models\Order;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
@@ -47,7 +50,15 @@ class StripeWebHookListener
             $order->update();
             $order->addPoints();
             $this->sendPusherEvent(1);
-            Cart::where('user_id', $metadata['user_id'])->delete();
+            $cart = Cart::where('user_id', $metadata['user_id'])->first();
+            $cartItems = CartItem::where('cart_id',$cart->id)->get();
+            foreach ($cartItems as $key => $item){
+                Log::info(['item_id'=> $item->id]);
+                CartProductAddOns::where('cart_item_id',$item->id)->delete();
+                CartAddOnValue::where('cart_item_id',$item->id)->delete();
+                $item->delete();
+            }
+            $cart->delete();
         }
     }
 
