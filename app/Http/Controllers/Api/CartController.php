@@ -10,6 +10,7 @@ use App\Models\Cart;
 use App\Models\CartAddOnValue;
 use App\Models\CartAdOnValues;
 use App\Models\CartItem;
+use App\Models\CartProductAddOns;
 use App\Service\Facades\Api;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -28,7 +29,6 @@ class CartController extends Controller
             $result = DB::transaction(function () use ($requestData, $cart_id) {
                 if ($cart_id != null) {
                     $cart = Cart::find($cart_id);
-//                    dd($cart == null);
                     if ($cart == null) {
                         return false;
                     }
@@ -37,8 +37,6 @@ class CartController extends Controller
                         'user_id' => auth()->id(),
                     ]);
                 }
-
-
                 foreach ($requestData as $cartDetail) {
                     $cartItem = new CartItem([
                         'product_id' => $cartDetail['product_id'],
@@ -166,6 +164,12 @@ class CartController extends Controller
             $user = auth()->user();
             $cart = Cart::where('user_id', $user->id)->first();
             if($cart){
+                $cartItems = CartItem::where('cart_id',$cart->id)->get();
+                foreach ($cartItems as $key => $item){
+                    CartProductAddOns::where('cart_item_id',$item->id)->delete();
+                    CartAddOnValue::where('cart_item_id',$item->id)->delete();
+                    $item->delete();
+                }
                 $cart->delete();
                 return Api::response([], 'Cart Deleted');
             }else{

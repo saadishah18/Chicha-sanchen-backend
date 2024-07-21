@@ -16,10 +16,10 @@
                         <tr>
                             <th>#</th>
                             <th>Customer Name</th>
-                            <th>Pr name</th>
-                            <th>Email</th>
-                            <th>DOB</th>
-                            {{--                                <th>Role</th>--}}
+                            <th>Payment Status</th>
+                            <th>Sale Status</th>
+                            <th>Order Date</th>
+                            <th>Order Items</th>
                             <th class="no-sort">Actions</th>
                         </tr>
                         </thead>
@@ -39,21 +39,25 @@
                 pageLength: 25,
                 processing: true,
                 serverSide: true,
-                ajax: "{{ route('admin.users.datatable') }}",
-                columns: [{
-                    data: 'id'
-                },
+                ajax: "{{ route('admin.orders.datatable') }}",
+                columns: [
                     {
-                        data: 'fname'
+                        data: 'order_unique_id'
                     },
                     {
-                        data: 'lname'
+                        data: 'full_name'
                     },
                     {
-                        data: 'email'
+                        data: 'payment_status'
                     },
                     {
-                        data: 'dob'
+                        data: 'sale_status'
+                    },
+                    {
+                        data: 'order_date_formatted'
+                    },
+                    {
+                        data: 'orderItemsCount'
                     },
                     {
                         data: 'actions'

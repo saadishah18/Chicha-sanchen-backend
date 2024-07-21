@@ -27,10 +27,12 @@ class OrderApiResource extends JsonResource
        return [
            'user_id' => $this->user_id,
            'order_id' => $this->id,
+           'order_unique_id' => $this->order_unique_id,
            'price' => $this->price,
            'order_date' => $this->order_date,
            'order_date_formated' => Carbon::parse($this->order_date)->toFormattedDateString(),
            'payment_status' => $this->payment_status,
+           'rewards_type' => $this->rewards_type,
            'orderItems' => $items instanceof \Illuminate\Database\Eloquent\Model
                ? [new OrderItemResource($items)]
                : OrderItemResource::collection($items)

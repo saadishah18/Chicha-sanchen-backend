@@ -84,11 +84,30 @@ class ProductAdOnsController extends Controller
     }
 
     public function edit($id){
-        $adOn = AddOn::find($id);
-        dd($adOn);
+        $adOn = AddOn::with('values')->find($id);
+        return view('admin.pages.adOns.edit',compact('adOn'));
     }
 
     public function update(Request $request){
+
+        try {
+            $adOnId = $request->id;
+//            dd($request->all());
+            $addOn = AddOn::find($adOnId);
+            if($addOn){
+                $values = $request->value;
+                foreach ($values as $key => $value){
+                    $adOnValue = AddOnValue::find($key);
+                    $adOnValue->value = $value;
+                    $adOnValue->price = $request->price[$key];
+                    $adOnValue->update();
+                }
+                return redirect()->route('admin.addons.index')->with(['success' => 'Updated values successfully']);
+            }
+            return back()->with(['error' => 'Add on not exists. Contact Admin']);
+        }catch (\Exception $exception){
+            return back()->withErrors($exception->getMessage());
+        }
 
     }
 

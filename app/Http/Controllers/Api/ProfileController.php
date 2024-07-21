@@ -79,11 +79,10 @@ class ProfileController extends Controller
             'total_earned_drinks' => $totalEarnedDrinks,
             'remaining_points' => $remainingPoints,
             'available_free_drinks' => $availableFreeDrinks->count(),
-            'used-free_drinks' => $usedFreeDrinks->count(),
+            'used_free_drinks' => $usedFreeDrinks->count(),
             'expired_free_drinks' => $expiredFreeDrinks->count(),
             'available_drinks_detail' => $availableFreeDrinks
         ];
-
         return Api::response($responseData,'Reward Points Detail');
     }
 

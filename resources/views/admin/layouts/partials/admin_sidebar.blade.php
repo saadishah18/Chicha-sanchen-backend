@@ -63,6 +63,10 @@
                     class="fas fa-fw fa-user-alt"></i><span>Products Ad Ons</span></a>
 {{--        @endcan--}}
     </li>
+    <li class="nav-item {{ request()->is('*orders*') ? 'active' : '' }}" style="min-height: 45px;">
+            <a class="nav-link" href="{{route('admin.orders.index')}}"><i
+                    class="fas fa-fw fa-user-alt"></i><span>Orders</span></a>
+    </li>
 {{--    <li class="nav-item {{ request()->is('*orders*') ? 'active' : '' }}" style="min-height: 45px;">--}}
 {{--            <a class="nav-link" href="{{route('admin.orders.index')}}"><i--}}
 {{--                    class="fas fa-fw fa-user-alt"></i><span>Orders</span></a>--}}

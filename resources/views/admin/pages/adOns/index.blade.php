@@ -126,7 +126,7 @@
                         data: 'name'
                     },
                     {
-                        data: 'values'
+                        data: 'adOnValues'
                     },
 
                     {

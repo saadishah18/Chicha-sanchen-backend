@@ -31,24 +31,6 @@
                         @include('admin.components.error', ['error' => 'parent_category_id'])
                     </div>
                 </div>
-
-                {{--                <div class="form-group row">--}}
-                {{--                    <label class="col-sm-2 col-form-label" for="other_categorys"><strong>Sub Category</strong></label>--}}
-                {{--                    <div class="col-sm-10">--}}
-                {{--                        <select name="other_categorys[]" multiple="multiple" id="other_categorys"--}}
-                {{--                                class="form-control select2 @error('other_categorys') is-invalid @enderror">--}}
-                {{--                            <option value="">Sub Category</option>--}}
-                {{--                            @foreach (\App\Models\SidebarCategory::where('open_status', 1)->where('alias', '!=', 'picture_sque')->select('category_id', 'category_name')->orderBy('category_name')->get()->toArray() as $subCategory)--}}
-                {{--                                <option value="{{ $subCategory['category_id'] }}"--}}
-                {{--                                    {{ old('other_categorys') && in_array($subCategory['category_id'], old('other_categorys')) ? 'selected' : '' }}>--}}
-                {{--                                    {{ $subCategory['category_name'] }}</option>--}}
-                {{--                            @endforeach--}}
-                {{--                        </select>--}}
-                {{--                        @include('admin.components.error', ['error' => 'other_categorys'])--}}
-                {{--                    </div>--}}
-
-                {{--                </div>--}}
-{{--                @dd($product);--}}
                 <div class="form-group row">
                     <label for="title" class="col-sm-2 col-form-label">Name<span class="text-danger">*</span></label>
                     <div class="col-sm-10">

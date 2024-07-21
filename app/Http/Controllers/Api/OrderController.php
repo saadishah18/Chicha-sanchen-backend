@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\CartApiResource;
 use App\Http\Resources\OrderApiResource;
 use App\Http\Resources\PaginationResource;
 use App\Models\AddOnValue;
 use App\Models\Cart;
 use App\Models\CartAddOnValue;
+use App\Models\CartItem;
 use App\Models\CartProductAddOns;
 use App\Models\Category;
 use App\Models\Order;
@@ -144,13 +146,17 @@ class OrderController extends Controller
             }
             $requestData = $request->all();
             $get_cart_detail = Cart::find($requestData['cart_id']);
-//            dd($requestData);
+
             if($get_cart_detail == null){
                 return Api::error('Cart is empty');
             }
             $cart_items = $get_cart_detail->cartItems;
 
-            $result = DB::transaction(function () use ($requestData, $cart_items) {
+            if(isset($requestData['use_rewards']) && $requestData['use_rewards'] == 1) {
+                $reward_type = count($requestData['reward_product_id']) == count($cart_items) ? 'Full Reward' : 'Partial Reward';
+            }
+
+            $result = DB::transaction(function () use ($requestData, $cart_items, $reward_type) {
                 $order = Order::create([
                     'user_id' => auth()->id(),
                     'price' => $requestData['total_price'],
@@ -158,6 +164,7 @@ class OrderController extends Controller
                     'payment_status' => 'Pending',
                     'order_type' => $requestData['order_type'],
                     'order_unique_id' => generateUniqueOrderId(),
+                    'rewards_type' => $reward_type
                 ]);
                 foreach ($cart_items as $item_index => $item) {
                     $product = Product::find($item['product_id']);
@@ -169,6 +176,8 @@ class OrderController extends Controller
                         'category_id' => $item['category_id'],
                         'category_name' => $category->name,
                         'product_price' => $item['product_price'],
+                        'rewards_type' => isset($requestData['reward_product_id'][$item_index]) &&
+                        $requestData['reward_product_id'][$item_index] == $item['product_id'] ? 'reward_redeemed' : 'paid'
                     ]);
                     $order->orderItems()->save($orderItem);
 //                    dd($orderItem, $item,$item['cartProductAddOns'] );
@@ -295,8 +304,6 @@ class OrderController extends Controller
                             $newValue->order_id = $newOrder->id; // Set the foreign key to the new order item
                             $newValue->order_item_id = $newOrderItem->id; // Set the foreign key to the new order item
                             $newValue->order_item_add_ons_id = $newAddOn->id; // Set the foreign key to the new order item
-//                            dd($newAddOn, $newValue);
-
                             $newValue->save(); // Save the new add-on
                         }
                     }
@@ -304,20 +311,74 @@ class OrderController extends Controller
                 return $newOrder;
             });
             if ($result != false) {
-                $result->addPoints();
-                Stripe::setApiKey(config('services.stripe.secret'));
-                $totalAmount = $result->price;
-                $currency = 'AED';
-                $paymentIntent = PaymentIntent::create([
-                    'amount' => $totalAmount * 100, // Amount is in cents
-                    'currency' => $currency,
-                    'payment_method_types' => ['card'],
-                ]);
-//                $result->addPoints();
-//                $paymentIntent = $this->makeLink($order);
+                $paymentIntent = $this->makeLink($result);
                 return Api::response(['order' => new OrderApiResource($result),'payment_intent' => $paymentIntent], 'Order Created');
             } else {
                 return Api::error('Cart could not be made! Contact admin');
+            }
+        }catch (\Exception $exception){
+            dd($exception->getMessage(),$exception->getLine(),$exception->getFile(),$exception->getTrace());
+        }
+
+    }
+    public function reOrderNew($id){
+        try {
+            $oldOrder = Order::find($id);
+
+            if ($oldOrder) {
+                $result = DB::transaction(function () use ($oldOrder) {
+                    $cart = Cart::where('user_id',$oldOrder->user_id)->first();
+                    if($cart == null){
+                        $cart = Cart::create([
+                            'user_id' => $oldOrder->user_id,
+                        ]);
+                    }
+                    $oldOrderItems = $oldOrder->orderItems;
+                    foreach ($oldOrderItems as $cartDetail) {
+                        $cartItem = new CartItem([
+                            'product_id' => $cartDetail['product_id'],
+                            'category_id' => $cartDetail['category_id'],
+                            'product_price' => $cartDetail['product_price'],
+                        ]);
+
+                        $cart->cartItems()->save($cartItem);
+                        $oldorderItemAddOns = $cartDetail->orderItemAddOns;
+                        if($oldorderItemAddOns != null){
+                            foreach ($oldorderItemAddOns as $addon) {
+//                                dd($addon);
+                                $cartProductAddOn = $cartItem->cartProductAddOns()->create([
+                                    'product_id' => $addon->product_id,
+                                    'parent_add_on_id' => $addon->parent_add_on_id,
+                                    'child_add_on_id' => $addon->child_add_on_id,
+                                ]);
+                                $addOnValues = $addon->values;
+                                foreach ($addOnValues as $value_index => $val) {
+                                    $addOnValue = AddOnValue::find($val['add_on_id']);
+                                    $valueName = $addOnValue ? $addOnValue->value : ''; // Assuming 'value' is the string column in your AddOnValue model
+                                    $obj = new CartAddOnValue([
+                                        'cart_id' => $cart->id,
+                                        'cart_item_id' => $cartItem->id,
+                                        'product_id' => $cartDetail['product_id'],
+                                        'add_on_id' => $val['add_on_id'],
+                                        'value_name' => $valueName,
+                                        'value_id' => $val['id'],
+                                        'value_price' => $addOnValue->price,
+                                    ]);
+//                                    dd($addOnValue,$obj);
+                                    $obj->save();
+                                }
+                            }
+                        }
+                    }
+                    return $cart;
+                });
+                if ($result != false){
+                    return Api::response(new CartApiResource($result), 'Product added to cart');
+                } else {
+                    return Api::error('Some thing went wrong! Contact admin');
+                }
+            } else {
+                return Api::error('Old Order not found');
             }
         }catch (\Exception $exception){
             dd($exception->getMessage(),$exception->getLine(),$exception->getFile(),$exception->getTrace());

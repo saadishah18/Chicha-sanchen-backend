@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\FreeDrink;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -25,10 +26,13 @@ class CartApiResource extends JsonResource
         }
         $totalPrice = $this->calculateTotalPrice();
 
+        $userTotalFreeDrinkCount = FreeDrink::where('user_id', $this->user_id)->count();
+
         return [
             'cart_id' => $this->id,
             'user_id' => $this->user_id,
             'total_price' => $totalPrice,
+            'total_earned_drinks' => $userTotalFreeDrinkCount,
             'cart_items' => $items instanceof \Illuminate\Database\Eloquent\Model
                 ? [new CartItemResource($items)]
                 : CartItemResource::collection($items)

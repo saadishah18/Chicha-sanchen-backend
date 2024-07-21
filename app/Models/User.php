@@ -73,7 +73,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function orders(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->hasMany(Order::class,'user_id');
+        return $this->hasMany(Order::class,'user_id')->where('payment_status','paid');
     }
 
 }
