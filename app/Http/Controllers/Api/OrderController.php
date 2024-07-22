@@ -12,6 +12,7 @@ use App\Models\CartAddOnValue;
 use App\Models\CartItem;
 use App\Models\CartProductAddOns;
 use App\Models\Category;
+use App\Models\FreeDrink;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\OrderItemAddOnValue;
@@ -20,12 +21,14 @@ use App\Service\Facades\Api;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Stripe\PaymentIntent;
 use Stripe\Stripe;
 
 class OrderController extends Controller
 {
-    public function placeOrderOld(Request $request){
+    public function placeOrderOld(Request $request)
+    {
         try {
             $requestData = $request->all();
             $result = DB::transaction(function () use ($requestData) {
@@ -69,7 +72,7 @@ class OrderController extends Controller
                                         'order_item_add_ons_id' => $orderItemAddOn->id,
                                         'product_id' => $orderDetail['product_id'],
                                         'add_on_id' => $val['add_on_id'],
-                                        'value_name' =>  $valueName,
+                                        'value_name' => $valueName,
                                         'value_id' => $val['id'],
                                         'value_price' => $val['price'],
                                     ]);
@@ -95,7 +98,7 @@ class OrderController extends Controller
                                     'order_item_add_ons_id' => $orderItemAddOn->id,
                                     'product_id' => $orderDetail['product_id'],
                                     'add_on_id' => $val['add_on_id'],
-                                    'value_name' =>  $valueName,
+                                    'value_name' => $valueName,
                                     'value_id' => $val['id'],
                                     'value_price' => $val['price'],
                                 ]);
@@ -129,41 +132,46 @@ class OrderController extends Controller
                 ]);
 
 
-                return Api::response(['order' => new OrderApiResource($result),'payment_intent' => $paymentIntent], 'Order Created');
+                return Api::response(['order' => new OrderApiResource($result), 'payment_intent' => $paymentIntent], 'Order Created');
             } else {
                 return Api::error('Order could not be made! Contact admin');
             }
-        }catch (\Exception $exception){
-            dd($exception->getMessage(),$exception->getLine(),$exception->getFile(),$exception->getTrace());
+        } catch (\Exception $exception) {
+            dd($exception->getMessage(), $exception->getLine(), $exception->getFile(), $exception->getTrace());
         }
 
     }
 
-    public function placeOrder(Request $request){
+    public function placeOrder(Request $request)
+    {
         try {
+
             if (!Api::validate(['cart_id' => 'required'])) {
                 return Api::validation_errors();
             }
             $requestData = $request->all();
             $get_cart_detail = Cart::find($requestData['cart_id']);
 
-            if($get_cart_detail == null){
+            if ($get_cart_detail == null) {
                 return Api::error('Cart is empty');
             }
             $cart_items = $get_cart_detail->cartItems;
             $reward_type = null;
-            if(isset($requestData['use_rewards']) && $requestData['use_rewards'] == 1) {
-                if(isset($requestData['reward_product_id']) && is_array($requestData['reward_product_id']) && !empty($requestData['reward_product_id'])
-                    && count($requestData['reward_product_id'])){
+            $free_cups = 0;
+            if (isset($requestData['use_rewards']) && $requestData['use_rewards'] == 1) {
+                if (isset($requestData['reward_product_id']) && is_array($requestData['reward_product_id']) && !empty($requestData['reward_product_id'])
+                    && count($requestData['reward_product_id'])) {
                     $reward_type = count($requestData['reward_product_id']) == count($cart_items) ? 'Full Reward' : 'Partial Reward';
+                    $free_cups = count($requestData['reward_product_id']);
                 }
             }
+
             $result = DB::transaction(function () use ($requestData, $cart_items, $reward_type) {
                 $order = Order::create([
                     'user_id' => auth()->id(),
                     'price' => $requestData['total_price'],
                     'order_date' => now()->toDateString(),
-                    'payment_status' => 'Pending',
+                    'payment_status' => $requestData['total_price'] > 0 ? 'Pending' : 'paid',
                     'order_type' => $requestData['order_type'],
                     'order_unique_id' => generateUniqueOrderId(),
                     'rewards_type' => $reward_type
@@ -185,7 +193,7 @@ class OrderController extends Controller
 //                    dd($orderItem, $item,$item['cartProductAddOns'] );
                     foreach ($item['cartProductAddOns'] as $addOn_key => $addon) {
                         $sub_add_ons = collect();
-                        if($addon->parent_add_on_id != null){
+                        if ($addon->parent_add_on_id != null) {
                             $sub_add_ons = CartProductAddOns::where('cart_item_id', $item->id)
                                 ->where('parent_add_on_id', $addon->parent_add_on_id)
                                 ->distinct('parent_add_on_id')->get();
@@ -258,7 +266,30 @@ class OrderController extends Controller
 
 
                 // Create a PaymentIntent with the specified amount, currency, and payment method types
-                $paymentIntent = $this->makeLink($order);
+                if ($requestData['total_price'] > 0) {
+                    $paymentIntent = $this->makeLink($order, $free_cups);
+
+                    return Api::response(['order' => new OrderApiResource($result), 'payment_intent' => $paymentIntent], 'Order Created');
+
+                }
+                $cart = Cart::where('user_id', auth()->id())->first();
+                $cartItems = CartItem::where('cart_id', $cart->id)->get();
+                foreach ($cartItems as $key => $item) {
+                    Log::info(['item_id' => $item->id]);
+                    CartProductAddOns::where('cart_item_id', $item->id)->delete();
+                    CartAddOnValue::where('cart_item_id', $item->id)->delete();
+                    $item->delete();
+                }
+                $cart->delete();
+
+                $userTotalFreeDrinkCount = FreeDrink::where('user_id', auth()->id())
+                    ->where('is_used', 0)->take($free_cups)->get();
+                foreach ($userTotalFreeDrinkCount as $drink) {
+                    $drink->is_used = 1;
+                    $drink->update();
+                }
+                return Api::response(['order' => new OrderApiResource($result)], 'Order Created');
+
 //                Stripe::setApiKey(config('services.stripe.secret'));
 //                $currency = 'AED';
 //                $totalAmount = $order->price;
@@ -271,17 +302,17 @@ class OrderController extends Controller
 //                $order->addPoints();
 
 //                return Api::response(new OrderApiResource($result), 'Order Created');
-                return Api::response(['order' => new OrderApiResource($result),'payment_intent' => $paymentIntent], 'Order Created');
 
             } else {
                 return Api::error('Order could not be made! Contact admin');
             }
-        }catch (\Exception $exception){
-            dd($exception->getMessage(),$exception->getLine(),$exception->getFile(),$exception->getTrace());
+        } catch (\Exception $exception) {
+            dd($exception->getMessage(), $exception->getLine(), $exception->getFile(), $exception->getTrace());
         }
     }
 
-    public function reOrder($id){
+    public function reOrder($id)
+    {
         try {
             $old_order = Order::find($id);
             $result = DB::transaction(function () use ($old_order) {
@@ -315,23 +346,25 @@ class OrderController extends Controller
             });
             if ($result != false) {
                 $paymentIntent = $this->makeLink($result);
-                return Api::response(['order' => new OrderApiResource($result),'payment_intent' => $paymentIntent], 'Order Created');
+                return Api::response(['order' => new OrderApiResource($result), 'payment_intent' => $paymentIntent], 'Order Created');
             } else {
                 return Api::error('Cart could not be made! Contact admin');
             }
-        }catch (\Exception $exception){
-            dd($exception->getMessage(),$exception->getLine(),$exception->getFile(),$exception->getTrace());
+        } catch (\Exception $exception) {
+            dd($exception->getMessage(), $exception->getLine(), $exception->getFile(), $exception->getTrace());
         }
 
     }
-    public function reOrderNew($id){
+
+    public function reOrderNew($id)
+    {
         try {
             $oldOrder = Order::find($id);
 
             if ($oldOrder) {
                 $result = DB::transaction(function () use ($oldOrder) {
-                    $cart = Cart::where('user_id',$oldOrder->user_id)->first();
-                    if($cart == null){
+                    $cart = Cart::where('user_id', $oldOrder->user_id)->first();
+                    if ($cart == null) {
                         $cart = Cart::create([
                             'user_id' => $oldOrder->user_id,
                         ]);
@@ -346,7 +379,7 @@ class OrderController extends Controller
 
                         $cart->cartItems()->save($cartItem);
                         $oldorderItemAddOns = $cartDetail->orderItemAddOns;
-                        if($oldorderItemAddOns != null){
+                        if ($oldorderItemAddOns != null) {
                             foreach ($oldorderItemAddOns as $addon) {
 //                                dd($addon);
                                 $cartProductAddOn = $cartItem->cartProductAddOns()->create([
@@ -375,7 +408,7 @@ class OrderController extends Controller
                     }
                     return $cart;
                 });
-                if ($result != false){
+                if ($result != false) {
                     return Api::response(new CartApiResource($result), 'Product added to cart');
                 } else {
                     return Api::error('Some thing went wrong! Contact admin');
@@ -383,13 +416,14 @@ class OrderController extends Controller
             } else {
                 return Api::error('Old Order not found');
             }
-        }catch (\Exception $exception){
-            dd($exception->getMessage(),$exception->getLine(),$exception->getFile(),$exception->getTrace());
+        } catch (\Exception $exception) {
+            dd($exception->getMessage(), $exception->getLine(), $exception->getFile(), $exception->getTrace());
         }
 
     }
 
-    public function orderHistory(){
+    public function orderHistory()
+    {
         try {
             $user = auth()->user();
             $orders = $user->orders()->paginate(5);
@@ -404,8 +438,8 @@ class OrderController extends Controller
                 // You might want to return a response or perform other actions
                 return Api::error('User Cart not exists');
             }
-        }catch (\Exception $exception){
-            dd($exception->getMessage(),$exception->getFile(),$exception->getLine(),$orders,$exception->getTrace());
+        } catch (\Exception $exception) {
+            dd($exception->getMessage(), $exception->getFile(), $exception->getLine(), $orders, $exception->getTrace());
             return Api::server_error($exception);
         }
     }
@@ -418,7 +452,7 @@ class OrderController extends Controller
         return response()->json($order, 200);
     }
 
-    public function makeLink($order)
+    public function makeLink($order, $freeCups)
     {
         #$stripe = Stripe::make('sk_test_51MRYMMIeKsa2Rfj0xUuh26QRBvowKwwPqMBqoxqR8iLfAXcw1HPPxTCguMmxBeF4UPDvy24P5MhYZbwnThG726Fk00AcLN4r0s');
         Stripe::setApiKey(config('services.stripe.secret'));
@@ -439,6 +473,7 @@ class OrderController extends Controller
                 'type' => 'Buy Cofee/ Tea',
                 'webhook_type' => 'checkout_webhook',
                 'customer_email' => auth()->user()->email,
+                'free_cups' => $freeCups,
             ]
         ]);
 

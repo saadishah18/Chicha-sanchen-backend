@@ -59,6 +59,12 @@ class StripeWebHookListener
                 $item->delete();
             }
             $cart->delete();
+            $userTotalFreeDrinkCount = FreeDrink::where('user_id', $metadata['user_id'])
+            ->where('is_used',0)->take($metadata['free_cups'])->get();
+            foreach ($userTotalFreeDrinkCount as $drink) {
+                $drink->is_used = 1;
+                $drink->update();
+            }
         }
     }
 
