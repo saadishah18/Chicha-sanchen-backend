@@ -65,4 +65,9 @@ class OrderController extends Controller
         );
         return response()->json($response);
     }
+
+    public function show($id){
+        $order = Order::with('orderItems')->find($id);
+        return view('admin.pages.orders.preview',compact('order'));
+    }
 }

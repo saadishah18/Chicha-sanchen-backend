@@ -151,11 +151,13 @@ class OrderController extends Controller
                 return Api::error('Cart is empty');
             }
             $cart_items = $get_cart_detail->cartItems;
-
+            $reward_type = null;
             if(isset($requestData['use_rewards']) && $requestData['use_rewards'] == 1) {
-                $reward_type = count($requestData['reward_product_id']) == count($cart_items) ? 'Full Reward' : 'Partial Reward';
+                if(isset($requestData['reward_product_id']) && is_array($requestData['reward_product_id']) && !empty($requestData['reward_product_id'])
+                    && count($requestData['reward_product_id'])){
+                    $reward_type = count($requestData['reward_product_id']) == count($cart_items) ? 'Full Reward' : 'Partial Reward';
+                }
             }
-
             $result = DB::transaction(function () use ($requestData, $cart_items, $reward_type) {
                 $order = Order::create([
                     'user_id' => auth()->id(),
@@ -198,8 +200,9 @@ class OrderController extends Controller
                                     'child_add_on_id' => $sub_add_on['child_add_on_id'],
                                 ]);
                                 foreach ($values as $value_index => $val) {
-                                    $addOnValue = AddOnValue::find($val['id']);
+                                    $addOnValue = AddOnValue::find($val['add_on_id']);
                                     $valueName = $addOnValue ? $addOnValue->value : ''; // Assuming 'value' is the string column in your AddOnValue model
+//                                    dd($addOnValue, $val);
                                     $obj = new OrderItemAddOnValue([
                                         'order_id' => $order->id,
                                         'order_item_id' => $orderItem->id,
