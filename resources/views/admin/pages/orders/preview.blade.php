@@ -31,24 +31,44 @@
         <h1 class="h3 mb-2 text-gray-800">Post View Analytics</h1>
         <div class="card shadow mb-4">
             <div class="card-body">
-                <div class="order">
-                    <h1>Order #{{$order->order_unique_id}}</h1>
-                    <div class="order-details">
-                        <p><strong>User Name:</strong> {{$order->user->fname.' '.$order->user->lname}}</p>
-                        <p><strong>Total Items:</strong> {{$order->orderItems->count()}}</p>
-                        <p><strong>Order Date:</strong>{{\Carbon\Carbon::parse($order->order_date)}}</p>
+                <div class="row">
+                    <div class="col-md-6">
+                        <h4><strong>Customer: </strong> {{ucfirst($order->user->fname).' '.ucfirst($order->user->lname)}}</h4>
+                        <p><strong>Total Items: </strong> {{$order->orderItems->count()}}</p>
+                        <p><strong>Order Date: </strong>{{\Carbon\Carbon::parse($order->order_date)->toFormattedDateString()}}</p>
                     </div>
+                    <div class="col-md-6">
+                        <h5 class="font-weight-bold float-right">Order <span class="text-primary">#{{$order->order_unique_id}}</span></h5>
+
+                    </div>
+                </div>
+                <div class="order">
+
+
                     @foreach($order->orderItems as $key => $item)
                         <div class="order-item">
-                            <h2>{{$item->product_name}}</h2>
-                            <ul class="add-ons">
+                            <h2>
+                                <ol start="1" type="1">
+                                    <li  value="{{ $loop->iteration++ }}">
+                                        {{$item->product_name}}
+                                    </li>
+                                </ol>
+
+                            </h2>
                                 @foreach($item->orderItemAddOns as $adOnIndex => $adOn)
-                                    @dd($adOn)
-                                <li>Extra shot of espresso</li>
+                                @if($adOn->values->count())
+                                <ul class="add-ons">
+                                    @foreach($adOn->values as $valIndex => $value)
+                                        <li>{{$value->value_name}}</li>
+                                    @endforeach
+
+                                    </ul>
+                                @else
+                                    <div class="alert alert-info">
+                                        <p>No Add for this item</p>
+                                    </div>
+                                @endif
                                 @endforeach
-{{--                                <li>Almond milk</li>--}}
-{{--                                <li>Vanilla syrup</li>--}}
-                            </ul>
                         </div>
                     @endforeach
                 </div>
