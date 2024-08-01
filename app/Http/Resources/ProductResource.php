@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Models\AddOn;
+use App\Models\AddOnValue;
 use App\Models\ProductAdOns;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -48,15 +49,18 @@ class ProductResource extends JsonResource
         ];
         $get_add_ons = ProductAdOns::where('product_id',$this->id)->get();
         $formatted_add_ons = [];
-
         foreach ($get_add_ons as $key => $add) {
             if ($add->add_on_parent_id == null) {
                 $ad_on_detail = AddOn::find($add->add_on_id);
+                $value_ids = $get_add_ons->where('add_on_id',$ad_on_detail->id)->pluck('value_id');
+                $values = AddOnValue::whereIn('id',$value_ids)->get();
+//                dd($values);
                 $formatted_add_ons[$ad_on_detail->id] = [
                     'add_on_id' => $ad_on_detail->id,
                     'name' => $ad_on_detail->name,
                     'product_id' => $add->product_id,
-                    'values' => $ad_on_detail->values,
+//                    'values' => $ad_on_detail->values,
+                    'values' => $values,
                     'screen' => $this->screen ?? false,
                     'sub_add_ons' => [], // Initialize sub_add_ons array
                 ];
