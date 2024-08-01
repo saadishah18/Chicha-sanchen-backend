@@ -29,7 +29,7 @@ class CategoryTableResource extends JsonResource
             'parent' => $parent,
             'image' => '',
             'created_at' => Carbon::parse($this->created_at)->toFormattedDateString(),
-            'actions' => $actions,
+//            'actions' => $actions,
         ];
     }
 }

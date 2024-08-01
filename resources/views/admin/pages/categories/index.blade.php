@@ -28,7 +28,7 @@
                                 <th>Category Name</th>
                                 <th>Parent Name</th>
                                 <th>Created At</th>
-                                <th class="no-sort">Actions</th>
+{{--                                <th class="no-sort">Actions</th>--}}
                             </tr>
                         </thead>
                     </table>
@@ -60,9 +60,9 @@
                     {
                         data: 'created_at'
                     },
-                    {
-                        data: 'actions'
-                    },
+                    // {
+                    //     data: 'actions'
+                    // },
                 ],
                 columnDefs: [{
                     targets: 'no-sort',

@@ -43,20 +43,20 @@
                     </div>
                 </div>
                 <div class="order">
-
-
                     @foreach($order->orderItems as $key => $item)
                         <div class="order-item">
                             <h2>
                                 <ol start="1" type="1">
                                     <li  value="{{ $loop->iteration++ }}">
-                                        {{$item->product_name}}
+                                    {{$item->product_name}}
                                     </li>
                                 </ol>
 
                             </h2>
+                            @if($item->orderItemAddOns->isNotEmpty())
                                 @foreach($item->orderItemAddOns as $adOnIndex => $adOn)
-                                @if($adOn->values->count())
+
+                                @if($adOn->values->isNotEmpty())
                                 <ul class="add-ons">
                                     @foreach($adOn->values as $valIndex => $value)
                                         <li>{{$value->value_name}}</li>
@@ -69,6 +69,11 @@
                                     </div>
                                 @endif
                                 @endforeach
+                            @else
+                                <div class="alert alert-info">
+                                    <p>No Add for this item</p>
+                                </div>
+                            @endif
                         </div>
                     @endforeach
                 </div>
